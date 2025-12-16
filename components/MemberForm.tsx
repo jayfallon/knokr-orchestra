@@ -73,15 +73,15 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
   if (success) {
     return (
       <div className="p-6 text-center">
-        <div className="text-4xl mb-4">✓</div>
-        <h3 className="text-xl font-semibold mb-2">Thank you!</h3>
-        <p className="text-zinc-500 mb-4">Your submission is pending review.</p>
+        <div className="text-4xl mb-4 text-[#d9657c]">✓</div>
+        <h3 className="text-xl font-semibold mb-2 text-[#4c222a]">Thank you!</h3>
+        <p className="text-[#4c222a]/60 mb-4">Your submission is pending review.</p>
         <button
           onClick={() => {
             setSuccess(false);
             onClose?.();
           }}
-          className="px-4 py-2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-lg hover:opacity-90"
+          className="px-4 py-2 bg-[#d9657c] text-white rounded-lg hover:bg-[#c45a6f]"
         >
           Close
         </button>
@@ -92,7 +92,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && (
-        <div className="p-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg text-sm">
+        <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm">
           {error}
         </div>
       )}
@@ -101,21 +101,21 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
       <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
 
       <div>
-        <label className="block text-sm font-medium mb-1">Name *</label>
+        <label className="block text-sm font-medium mb-1 text-[#4c222a]">Name *</label>
         <input
           type="text"
           name="name"
           required
-          className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-500"
+          className="w-full px-3 py-2 border border-[#d9657c]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d9657c]/50 text-[#4c222a]"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Role *</label>
+        <label className="block text-sm font-medium mb-1 text-[#4c222a]">Role *</label>
         <select
           name="role"
           required
-          className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-500"
+          className="w-full px-3 py-2 border border-[#d9657c]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d9657c]/50 text-[#4c222a]"
         >
           <option value="">Select a role</option>
           {MEMBER_ROLES.map((role) => (
@@ -132,61 +132,61 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
           name="isActive"
           id="isActive"
           defaultChecked
-          className="rounded border-zinc-300 dark:border-zinc-700"
+          className="rounded border-[#d9657c]/30 text-[#d9657c] focus:ring-[#d9657c]"
         />
-        <label htmlFor="isActive" className="text-sm">Currently active member</label>
+        <label htmlFor="isActive" className="text-sm text-[#4c222a]">Currently active member</label>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Start Year</label>
+          <label className="block text-sm font-medium mb-1 text-[#4c222a]">Start Year</label>
           <input
             type="number"
             name="startYear"
             min="1900"
             max={new Date().getFullYear()}
-            className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-500"
+            className="w-full px-3 py-2 border border-[#d9657c]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d9657c]/50 text-[#4c222a]"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">End Year</label>
+          <label className="block text-sm font-medium mb-1 text-[#4c222a]">End Year</label>
           <input
             type="number"
             name="endYear"
             min="1900"
             max={new Date().getFullYear()}
-            className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-500"
+            className="w-full px-3 py-2 border border-[#d9657c]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d9657c]/50 text-[#4c222a]"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Image URL</label>
+        <label className="block text-sm font-medium mb-1 text-[#4c222a]">Image URL</label>
         <input
           type="url"
           name="imageUrl"
           placeholder="https://..."
-          className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-500"
+          className="w-full px-3 py-2 border border-[#d9657c]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d9657c]/50 text-[#4c222a] placeholder:text-[#4c222a]/40"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Wikipedia URL</label>
+        <label className="block text-sm font-medium mb-1 text-[#4c222a]">Wikipedia URL</label>
         <input
           type="url"
           name="wikipediaUrl"
           placeholder="https://en.wikipedia.org/wiki/..."
-          className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-500"
+          className="w-full px-3 py-2 border border-[#d9657c]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d9657c]/50 text-[#4c222a] placeholder:text-[#4c222a]/40"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Notes</label>
+        <label className="block text-sm font-medium mb-1 text-[#4c222a]">Notes</label>
         <textarea
           name="note"
           rows={2}
           placeholder="Any additional information..."
-          className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-500 resize-none"
+          className="w-full px-3 py-2 border border-[#d9657c]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d9657c]/50 text-[#4c222a] placeholder:text-[#4c222a]/40 resize-none"
         />
       </div>
 
@@ -206,7 +206,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800"
+            className="flex-1 px-4 py-2 border border-[#d9657c]/30 text-[#4c222a] rounded-lg hover:bg-[#fdf5d4]"
           >
             Cancel
           </button>
@@ -214,7 +214,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 px-4 py-2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-lg hover:opacity-90 disabled:opacity-50"
+          className="flex-1 px-4 py-2 bg-[#d9657c] text-white rounded-lg hover:bg-[#c45a6f] disabled:opacity-50"
         >
           {loading ? "Submitting..." : "Submit"}
         </button>

@@ -40,10 +40,10 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
   const [showPast, setShowPast] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#d9657c] to-[#4c222a]">
-      <header className="border-b border-[#fdf5d4]/10">
+    <div className="min-h-screen bg-[#fdf5d4]">
+      <header className="border-b border-[#d9657c]/20">
         <div className="max-w-4xl mx-auto px-4 py-4">
-          <Link href="/" className="text-sm text-[#fdf5d4]/80 hover:text-[#fdf5d4]">
+          <Link href="/" className="text-sm text-[#d9657c] hover:text-[#4c222a]">
             ← Back to search
           </Link>
         </div>
@@ -60,19 +60,19 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
               style={{ aspectRatio: "1.618 / 1" }}
             />
           ) : (
-            <div className="w-48 sm:w-56 rounded-xl bg-[#fdf5d4]/20 flex items-center justify-center text-4xl text-[#fdf5d4]/60 flex-shrink-0" style={{ aspectRatio: "1.618 / 1" }}>
+            <div className="w-48 sm:w-56 rounded-xl bg-[#d9657c]/20 flex items-center justify-center text-4xl text-[#d9657c] flex-shrink-0" style={{ aspectRatio: "1.618 / 1" }}>
               {artist.name[0]}
             </div>
           )}
           <div className="flex-1">
-            <h1 className="text-3xl font-bold mb-2 text-[#fdf5d4]">{artist.name}</h1>
-            <p className="text-[#fdf5d4]/70 mb-2">{artist.location}</p>
+            <h1 className="text-3xl font-bold mb-2 text-[#4c222a]">{artist.name}</h1>
+            <p className="text-[#4c222a]/70 mb-2">{artist.location}</p>
             {artist.genres.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-4">
                 {artist.genres.map((genre) => (
                   <span
                     key={genre}
-                    className="px-2 py-1 text-xs bg-[#fdf5d4]/20 text-[#fdf5d4] rounded-full"
+                    className="px-2 py-1 text-xs bg-[#d9657c]/20 text-[#d9657c] rounded-full"
                   >
                     {genre}
                   </span>
@@ -85,7 +85,7 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
                   href={artist.spotify}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[#fdf5d4] hover:underline"
+                  className="text-sm text-[#d9657c] hover:underline"
                 >
                   Spotify
                 </a>
@@ -95,7 +95,7 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
                   href={artist.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[#fdf5d4]/80 hover:underline"
+                  className="text-sm text-[#d9657c]/80 hover:underline"
                 >
                   Website
                 </a>
@@ -107,12 +107,12 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
         {/* Current Members */}
         <section className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-[#fdf5d4]">
+            <h2 className="text-xl font-semibold text-[#4c222a]">
               Current Members {currentMembers.length > 0 && `(${currentMembers.length})`}
             </h2>
             <button
               onClick={() => setShowForm(true)}
-              className="px-4 py-2 bg-[#fdf5d4] text-[#4c222a] rounded-lg text-sm font-medium hover:opacity-90"
+              className="px-4 py-2 bg-[#d9657c] text-white rounded-lg text-sm font-medium hover:bg-[#c45a6f]"
             >
               + Add Member
             </button>
@@ -124,7 +124,7 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
               ))}
             </div>
           ) : (
-            <p className="text-[#fdf5d4]/60 py-8 text-center border border-dashed border-[#fdf5d4]/30 rounded-xl">
+            <p className="text-[#4c222a]/60 py-8 text-center border border-dashed border-[#d9657c]/30 rounded-xl">
               No members listed yet. Be the first to add one!
             </p>
           )}
@@ -135,7 +135,7 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
           <section>
             <button
               onClick={() => setShowPast(!showPast)}
-              className="flex items-center gap-2 text-lg font-semibold mb-4 text-[#fdf5d4] hover:text-[#fdf5d4]/80"
+              className="flex items-center gap-2 text-lg font-semibold mb-4 text-[#4c222a] hover:text-[#d9657c]"
             >
               <span className={`transition-transform ${showPast ? "rotate-90" : ""}`}>▶</span>
               Past Members ({pastMembers.length})
@@ -155,7 +155,7 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
           <div className="w-full max-w-md bg-white rounded-2xl shadow-xl max-h-[90vh] overflow-auto">
-            <div className="p-6 border-b border-zinc-200">
+            <div className="p-6 border-b border-[#d9657c]/20">
               <h2 className="text-xl font-semibold text-[#4c222a]">Add a Band Member</h2>
               <p className="text-sm text-[#4c222a]/60">for {artist.name}</p>
             </div>
@@ -173,13 +173,13 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
       )}
 
       {/* Footer */}
-      <footer className="border-t border-[#fdf5d4]/10 mt-16">
-        <div className="max-w-4xl mx-auto px-4 py-6 text-center text-sm text-[#fdf5d4]/50">
+      <footer className="border-t border-[#d9657c]/20 mt-16">
+        <div className="max-w-4xl mx-auto px-4 py-6 text-center text-sm text-[#4c222a]/50">
           <a
             href={`https://knokr.com/a/${artist.slug}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:underline"
+            className="text-[#d9657c] hover:underline"
           >
             View {artist.name} on Knokr →
           </a>

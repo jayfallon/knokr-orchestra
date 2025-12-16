@@ -38,16 +38,16 @@ export default function SuggestBand() {
         <button
           onClick={fetchRandom}
           disabled={loading}
-          className="px-4 py-2 text-sm text-[#fdf5d4]/80 hover:text-[#fdf5d4] border border-[#fdf5d4]/30 hover:border-[#fdf5d4]/50 rounded-lg transition-colors disabled:opacity-50"
+          className="px-4 py-2 text-sm text-[#d9657c] hover:text-[#4c222a] border border-[#d9657c]/30 hover:border-[#d9657c]/50 rounded-lg transition-colors disabled:opacity-50"
         >
           {loading ? "Finding..." : "Suggest a band"}
         </button>
       ) : (
-        <div className="p-4 bg-[#fdf5d4]/10 rounded-xl border border-[#fdf5d4]/20">
-          <p className="text-sm text-[#fdf5d4]/70 mb-2">How about...</p>
+        <div className="p-4 bg-white rounded-xl border border-[#d9657c]/20">
+          <p className="text-sm text-[#4c222a]/60 mb-2">How about...</p>
           <Link
             href={`/artist/${artist.slug}`}
-            className="text-xl font-semibold text-[#fdf5d4] hover:underline"
+            className="text-xl font-semibold text-[#d9657c] hover:underline"
           >
             {artist.name}
           </Link>
@@ -56,14 +56,14 @@ export default function SuggestBand() {
               href={googleSearchUrl!}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-[#fdf5d4]/60 hover:text-[#fdf5d4] hover:underline"
+              className="text-xs text-[#4c222a]/60 hover:text-[#d9657c] hover:underline"
             >
               Search Wikipedia
             </a>
             <button
               onClick={fetchRandom}
               disabled={loading}
-              className="text-xs text-[#fdf5d4]/60 hover:text-[#fdf5d4] hover:underline disabled:opacity-50"
+              className="text-xs text-[#4c222a]/60 hover:text-[#d9657c] hover:underline disabled:opacity-50"
             >
               {loading ? "..." : "Try another"}
             </button>

@@ -20,7 +20,7 @@ export default function MemberCard({ member }: { member: Member }) {
         : null;
 
   return (
-    <div className="flex items-center gap-4 p-4 bg-[#fdf5d4]/10 rounded-xl border border-[#fdf5d4]/20">
+    <div className="flex items-center gap-4 p-4 bg-white rounded-xl border border-[#d9657c]/20">
       {getArtistImageUrl(member.imageUrl) ? (
         <img
           src={getArtistImageUrl(member.imageUrl)!}
@@ -29,7 +29,7 @@ export default function MemberCard({ member }: { member: Member }) {
           style={{ aspectRatio: "1.618 / 1" }}
         />
       ) : (
-        <div className="w-16 rounded bg-[#fdf5d4]/20 flex items-center justify-center text-xl text-[#fdf5d4]/60" style={{ aspectRatio: "1.618 / 1" }}>
+        <div className="w-16 rounded bg-[#d9657c]/20 flex items-center justify-center text-xl text-[#d9657c]" style={{ aspectRatio: "1.618 / 1" }}>
           {member.name[0]}
         </div>
       )}
@@ -40,17 +40,17 @@ export default function MemberCard({ member }: { member: Member }) {
               href={member.wikipediaUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium text-[#fdf5d4] hover:underline"
+              className="font-medium text-[#4c222a] hover:text-[#d9657c] hover:underline"
             >
               {member.name}
             </a>
           ) : (
-            <span className="font-medium text-[#fdf5d4]">{member.name}</span>
+            <span className="font-medium text-[#4c222a]">{member.name}</span>
           )}
         </div>
-        <p className="text-sm text-[#fdf5d4]/70 capitalize">
+        <p className="text-sm text-[#4c222a]/70 capitalize">
           {member.role}
-          {years && <span className="ml-2 text-[#fdf5d4]/50">({years})</span>}
+          {years && <span className="ml-2 text-[#4c222a]/50">({years})</span>}
         </p>
       </div>
     </div>
