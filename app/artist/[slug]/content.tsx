@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import MemberCard from "@/components/MemberCard";
 import MemberForm from "@/components/MemberForm";
 import { getArtistImageUrl } from "@/lib/image";
@@ -60,12 +61,16 @@ export default function ArtistContent({ artist, currentMembers, pastMembers, rel
       {/* Hero Image */}
       {getArtistImageUrl(artist.imageUrl) ? (
         <div className="flex justify-center mb-8">
-          <img
-            src={getArtistImageUrl(artist.imageUrl)!}
-            alt={artist.name}
-            className="w-full max-w-7xl rounded-xl object-cover"
-            style={{ aspectRatio: "1.618 / 1" }}
-          />
+          <div className="relative w-full max-w-7xl rounded-xl overflow-hidden" style={{ aspectRatio: "1.618 / 1" }}>
+            <Image
+              src={getArtistImageUrl(artist.imageUrl)!}
+              alt={artist.name}
+              fill
+              sizes="(max-width: 1280px) 100vw, 1280px"
+              className="object-cover"
+              priority
+            />
+          </div>
         </div>
       ) : (
         <div className="flex justify-center mb-8">
@@ -179,10 +184,12 @@ export default function ArtistContent({ artist, currentMembers, pastMembers, rel
                   <div className="h-full transition-all duration-200 hover:shadow-lg hover:scale-[1.02] rounded-xl bg-white border border-[#ba326b]/10 overflow-hidden">
                     <div className="relative overflow-hidden rounded-t-xl" style={{ aspectRatio: "1.618 / 1" }}>
                       {getArtistImageUrl(related.imageUrl) ? (
-                        <img
+                        <Image
                           src={getArtistImageUrl(related.imageUrl)!}
                           alt={related.name}
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          fill
+                          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
                         />
                       ) : (
                         <div className="flex w-full h-full items-center justify-center bg-gradient-to-br from-[#610553]/20 to-[#ba326b]/20 text-4xl text-[#ba326b]">
