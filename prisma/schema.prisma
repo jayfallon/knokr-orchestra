@@ -20,9 +20,28 @@ model Artist {
   imageUrl       String?
   members        ArtistMember[]    @relation("ArtistMembers")
   pendingMembers PendingArtistMember[] @relation("PendingArtistMembers")
+  connections    ArtistConnection[] @relation("ArtistConnections")
+  connectedBy    ArtistConnection[] @relation("ConnectedArtists")
 
   @@index([slug])
   @@index([name])
+}
+
+model ArtistConnection {
+  id                String   @id @default(cuid())
+  artistId          String
+  connectedArtistId String
+  weight            Float    @default(1.0)
+  sharedFestivals   Int      @default(1)
+  lastUpdated       DateTime @default(now()) @updatedAt
+
+  artist          Artist @relation("ArtistConnections", fields: [artistId], references: [id], onDelete: Cascade)
+  connectedArtist Artist @relation("ConnectedArtists", fields: [connectedArtistId], references: [id], onDelete: Cascade)
+
+  @@unique([artistId, connectedArtistId])
+  @@index([artistId])
+  @@index([connectedArtistId])
+  @@index([weight])
 }
 
 model ArtistMember {

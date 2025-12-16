@@ -68,21 +68,21 @@ export default function SearchInput() {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search for an artist or band..."
-        className="w-full px-6 py-4 text-lg bg-white border-2 border-zinc-200 rounded-full focus:outline-none focus:border-zinc-400"
+        className="w-full px-6 py-4 text-lg text-[#4c222a] bg-white border-2 border-[#ba326b]/30 rounded-full focus:outline-none focus:border-[#ba326b] placeholder:text-[#4c222a]/40"
       />
       {loading && (
         <div className="absolute right-4 top-1/2 -translate-y-1/2">
-          <div className="w-5 h-5 border-2 border-zinc-300 border-t-zinc-600 rounded-full animate-spin" />
+          <div className="w-5 h-5 border-2 border-[#ba326b]/30 border-t-[#ba326b] rounded-full animate-spin" />
         </div>
       )}
 
       {isOpen && results.length > 0 && (
-        <ul className="absolute z-10 w-full mt-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-lg max-h-96 overflow-auto">
+        <ul className="absolute z-10 w-full mt-2 bg-white border border-[#ba326b]/20 rounded-xl shadow-lg max-h-96 overflow-auto">
           {results.map((artist) => (
             <li key={artist.id}>
               <button
                 onClick={() => selectArtist(artist.slug)}
-                className="w-full px-4 py-3 flex items-center gap-4 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-left"
+                className="w-full px-4 py-3 flex items-center gap-4 hover:bg-[#fdf5d4] text-left"
               >
                 {getArtistImageUrl(artist.imageUrl) ? (
                   <img
@@ -92,13 +92,13 @@ export default function SearchInput() {
                     style={{ aspectRatio: "1.618 / 1" }}
                   />
                 ) : (
-                  <div className="w-16 h-10 rounded bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-zinc-500" style={{ aspectRatio: "1.618 / 1" }}>
+                  <div className="w-16 h-10 rounded bg-[#ba326b]/20 flex items-center justify-center text-[#ba326b]" style={{ aspectRatio: "1.618 / 1" }}>
                     {artist.name[0]}
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium truncate">{artist.name}</p>
-                  <p className="text-sm text-zinc-500 truncate">
+                  <p className="font-medium text-[#4c222a] truncate">{artist.name}</p>
+                  <p className="text-sm text-[#4c222a]/60 truncate">
                     {artist.location} {artist.memberCount > 0 && `· ${artist.memberCount} members`}
                   </p>
                 </div>
@@ -109,7 +109,7 @@ export default function SearchInput() {
       )}
 
       {isOpen && query.length >= 2 && results.length === 0 && !loading && (
-        <div className="absolute z-10 w-full mt-2 px-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-lg text-zinc-500">
+        <div className="absolute z-10 w-full mt-2 px-4 py-3 bg-white border border-[#ba326b]/20 rounded-xl shadow-lg text-[#4c222a]/60">
           No artists found
         </div>
       )}

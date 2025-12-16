@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.36.3",
+    "@heroui/react": "^2.8.6",
     "@marsidev/react-turnstile": "^1.4.0",
+    "framer-motion": "^12.23.26",
     "next": "16.0.10",
     "react": "19.2.1",
     "react-dom": "19.2.1",
