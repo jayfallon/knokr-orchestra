@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Artist {
+  id             String            @id @default(cuid())
+  name           String
+  slug           String            @unique
+  location       String
+  country        String
+  genres         String[]
+  bio            String?
+  website        String?
+  spotify        String?
+  imageUrl       String?
+  members        ArtistMember[]    @relation("ArtistMembers")
+  pendingMembers PendingArtistMember[] @relation("PendingArtistMembers")
+
+  @@index([slug])
+  @@index([name])
+}
+
+model ArtistMember {
+  id           String   @id @default(cuid())
+  artistId     String
+  name         String
+  role         String
+  isActive     Boolean  @default(true)
+  startYear    Int?
+  endYear      Int?
+  imageUrl     String?
+  wikipediaUrl String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  artist       Artist   @relation("ArtistMembers", fields: [artistId], references: [id], onDelete: Cascade)
+  promotedFrom PendingArtistMember[] @relation("PromotedMember")
+
+  @@index([artistId])
+  @@index([name])
+}
+
+enum PendingMemberStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  DUPLICATE
+}
+
+model PendingArtistMember {
+  id            String              @id @default(cuid())
+  artistId      String
+  name          String
+  role          String
+  isActive      Boolean             @default(true)
+  startYear     Int?
+  endYear       Int?
+  imageUrl      String?
+  wikipediaUrl  String?
+  submittedAt   DateTime            @default(now())
+  submitterIp   String?
+  submitterNote String?
+  status        PendingMemberStatus @default(PENDING)
+  reviewedAt    DateTime?
+  reviewedById  String?
+  adminNotes    String?
+  promotedToId  String?
+
+  artist     Artist        @relation("PendingArtistMembers", fields: [artistId], references: [id], onDelete: Cascade)
+  promotedTo ArtistMember? @relation("PromotedMember", fields: [promotedToId], references: [id])
+
+  @@index([artistId])
+  @@index([status])
+  @@index([submittedAt])
+}
