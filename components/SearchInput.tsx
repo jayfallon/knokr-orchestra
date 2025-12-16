@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { getArtistImageUrl } from "@/lib/image";
 
 interface Artist {
@@ -85,14 +86,17 @@ export default function SearchInput() {
                 className="w-full px-4 py-3 flex items-center gap-4 hover:bg-[#fdf5d4] text-left"
               >
                 {getArtistImageUrl(artist.imageUrl) ? (
-                  <img
-                    src={getArtistImageUrl(artist.imageUrl)!}
-                    alt={artist.name}
-                    className="w-16 h-10 rounded object-cover"
-                    style={{ aspectRatio: "1.618 / 1" }}
-                  />
+                  <div className="relative w-16 h-10 rounded overflow-hidden flex-shrink-0">
+                    <Image
+                      src={getArtistImageUrl(artist.imageUrl)!}
+                      alt={artist.name}
+                      fill
+                      sizes="64px"
+                      className="object-cover"
+                    />
+                  </div>
                 ) : (
-                  <div className="w-16 h-10 rounded bg-[#ba326b]/20 flex items-center justify-center text-[#ba326b]" style={{ aspectRatio: "1.618 / 1" }}>
+                  <div className="w-16 h-10 rounded bg-[#ba326b]/20 flex items-center justify-center text-[#ba326b] flex-shrink-0">
                     {artist.name[0]}
                   </div>
                 )}
