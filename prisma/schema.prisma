@@ -53,19 +53,21 @@ enum PendingMemberStatus {
 }
 
 model PendingArtistMember {
-  id            String              @id @default(cuid())
-  artistId      String
-  name          String
-  role          String
-  isActive      Boolean             @default(true)
-  startYear     Int?
-  endYear       Int?
-  imageUrl      String?
-  wikipediaUrl  String?
-  submittedAt   DateTime            @default(now())
-  submitterIp   String?
-  submitterNote String?
-  status        PendingMemberStatus @default(PENDING)
+  id              String              @id @default(cuid())
+  artistId        String
+  name            String
+  role            String
+  isActive        Boolean             @default(true)
+  startYear       Int?
+  endYear         Int?
+  imageUrl        String?
+  wikipediaUrl    String?
+  submittedAt     DateTime            @default(now())
+  submitterIp     String?
+  submitterUserId String?
+  submitterName   String?
+  submitterNote   String?
+  status          PendingMemberStatus @default(PENDING)
   reviewedAt    DateTime?
   reviewedById  String?
   adminNotes    String?

@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import { memberSubmissionSchema } from "@/lib/validation";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { NextRequest } from "next/server";
 import { headers } from "next/headers";
 
@@ -68,6 +69,13 @@ export async function POST(
       return Response.json({ error: "Artist not found" }, { status: 404 });
     }
 
+    // Get current user info (optional - anonymous submissions allowed)
+    const user = await currentUser();
+    const submitterUserId = user?.id ?? null;
+    const submitterName = user
+      ? `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || user.username || user.emailAddresses[0]?.emailAddress || null
+      : null;
+
     // Check if member name matches an existing artist
     const matchedArtist = await prisma.artist.findFirst({
       where: {
@@ -89,6 +97,8 @@ export async function POST(
         wikipediaUrl: data.wikipediaUrl ?? null,
         submitterNote: data.note ?? null,
         submitterIp: ip,
+        submitterUserId,
+        submitterName,
       },
     });
 
