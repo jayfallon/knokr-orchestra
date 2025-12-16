@@ -70,22 +70,25 @@ export default async function ArtistPage({ params }: PageProps) {
 
   if (!artist) notFound();
 
-  // Look up artists that match member names to get their images
+  // Look up artists that match member names - use Artist data if exists
   const memberNames = artist.members.map((m) => m.name);
   const matchingArtists = await prisma.artist.findMany({
     where: { name: { in: memberNames } },
     select: { name: true, imageUrl: true },
   });
-  const artistImageMap = new Map(matchingArtists.map((a) => [a.name, a.imageUrl]));
+  const artistDataMap = new Map(matchingArtists.map((a) => [a.name, a]));
 
-  // Merge member data with artist images
-  const membersWithImages = artist.members.map((m) => ({
-    ...m,
-    imageUrl: m.imageUrl || artistImageMap.get(m.name) || null,
-  }));
+  // If member exists as Artist, use Artist imageUrl
+  const membersWithArtistData = artist.members.map((m) => {
+    const artistRecord = artistDataMap.get(m.name);
+    return {
+      ...m,
+      imageUrl: artistRecord?.imageUrl ?? m.imageUrl,
+    };
+  });
 
-  const currentMembers = membersWithImages.filter((m) => m.isActive);
-  const pastMembers = membersWithImages.filter((m) => !m.isActive);
+  const currentMembers = membersWithArtistData.filter((m) => m.isActive);
+  const pastMembers = membersWithArtistData.filter((m) => !m.isActive);
   const relatedArtists = artist.connections.map((c) => c.connectedArtist);
 
   return (
