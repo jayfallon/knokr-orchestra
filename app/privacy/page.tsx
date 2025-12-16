@@ -6,23 +6,23 @@ export const metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#d9657c] to-[#4c222a] px-5 py-10">
-      <div className="max-w-2xl mx-auto">
-        <Link
-          href="/"
-          className="inline-block mb-6 text-[#fdf5d4]/80 hover:text-[#fdf5d4]"
-        >
-          ← Back
-        </Link>
+    <div className="min-h-screen bg-[#fdf5d4]">
+      <header className="border-b border-[#ba326b]/20">
+        <div className="max-w-3xl mx-auto px-4 py-4">
+          <Link href="/" className="text-sm text-[#ba326b] hover:text-[#4c222a]">
+            ← Back to search
+          </Link>
+        </div>
+      </header>
 
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <h1 className="text-3xl font-bold text-[#2c1418] mb-6">
-            Privacy & Data
-          </h1>
+      <main className="max-w-3xl mx-auto px-4 py-12">
+        <h1 className="text-4xl font-bold text-[#4c222a] mb-8 uppercase tracking-wide">
+          Privacy & Data
+        </h1>
 
-          <div className="space-y-6 text-[#2c1418]/80">
+        <div className="space-y-6 text-[#4c222a]/80">
             <section>
-              <h2 className="text-lg font-semibold text-[#2c1418] mb-2">
+              <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
                 Information We Collect
               </h2>
               <p>When you use Orchestra, we may collect:</p>
@@ -43,7 +43,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#2c1418] mb-2">
+              <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
                 How We Use Your Information
               </h2>
               <p>
@@ -55,7 +55,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#2c1418] mb-2">
+              <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
                 Data Sharing
               </h2>
               <p>
@@ -66,7 +66,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#2c1418] mb-2">
+              <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
                 Your Rights
               </h2>
               <p>You have the right to:</p>
@@ -78,7 +78,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#2c1418] mb-2">
+              <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
                 Security
               </h2>
               <p>
@@ -88,7 +88,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#2c1418] mb-2">
+              <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
                 Third-Party Services
               </h2>
               <ul className="list-disc list-inside mt-2 space-y-1">
@@ -98,35 +98,21 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#2c1418] mb-2">
+              <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
                 Contact
               </h2>
               <p>
                 For privacy inquiries or data requests, please contact{" "}
                 <a
                   href="mailto:privacy@knokr.com"
-                  className="text-[#d9657c] hover:underline"
+                  className="text-[#ba326b] hover:underline"
                 >
                   privacy@knokr.com
                 </a>
               </p>
             </section>
           </div>
-        </div>
-
-        <footer className="mt-8 text-center text-sm text-[#fdf5d4]/50">
-          &copy; {new Date().getFullYear()}{" "}
-          <a
-            href="https://knokr.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:underline"
-          >
-            Knokr
-          </a>
-          . All rights reserved.
-        </footer>
-      </div>
+      </main>
     </div>
   );
 }
