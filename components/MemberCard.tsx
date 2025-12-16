@@ -20,7 +20,7 @@ export default function MemberCard({ member }: { member: Member }) {
         : null;
 
   return (
-    <div className="flex items-center gap-4 p-4 bg-white rounded-xl border border-[#d9657c]/20">
+    <div className="flex items-center gap-4 p-4 bg-white rounded-xl border border-[#ba326b]/20">
       {getArtistImageUrl(member.imageUrl) ? (
         <img
           src={getArtistImageUrl(member.imageUrl)!}
@@ -29,7 +29,7 @@ export default function MemberCard({ member }: { member: Member }) {
           style={{ aspectRatio: "1.618 / 1" }}
         />
       ) : (
-        <div className="w-16 rounded bg-[#d9657c]/20 flex items-center justify-center text-xl text-[#d9657c]" style={{ aspectRatio: "1.618 / 1" }}>
+        <div className="w-16 rounded bg-[#ba326b]/20 flex items-center justify-center text-xl text-[#ba326b]" style={{ aspectRatio: "1.618 / 1" }}>
           {member.name[0]}
         </div>
       )}
@@ -40,7 +40,7 @@ export default function MemberCard({ member }: { member: Member }) {
               href={member.wikipediaUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium text-[#4c222a] hover:text-[#d9657c] hover:underline"
+              className="font-medium text-[#4c222a] hover:text-[#ba326b] hover:underline"
             >
               {member.name}
             </a>

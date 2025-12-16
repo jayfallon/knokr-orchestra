@@ -41,9 +41,9 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
 
   return (
     <div className="min-h-screen bg-[#fdf5d4]">
-      <header className="border-b border-[#d9657c]/20">
+      <header className="border-b border-[#ba326b]/20">
         <div className="max-w-4xl mx-auto px-4 py-4">
-          <Link href="/" className="text-sm text-[#d9657c] hover:text-[#4c222a]">
+          <Link href="/" className="text-sm text-[#ba326b] hover:text-[#4c222a]">
             ← Back to search
           </Link>
         </div>
@@ -60,7 +60,7 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
               style={{ aspectRatio: "1.618 / 1" }}
             />
           ) : (
-            <div className="w-48 sm:w-56 rounded-xl bg-[#d9657c]/20 flex items-center justify-center text-4xl text-[#d9657c] flex-shrink-0" style={{ aspectRatio: "1.618 / 1" }}>
+            <div className="w-48 sm:w-56 rounded-xl bg-[#ba326b]/20 flex items-center justify-center text-4xl text-[#ba326b] flex-shrink-0" style={{ aspectRatio: "1.618 / 1" }}>
               {artist.name[0]}
             </div>
           )}
@@ -72,7 +72,7 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
                 {artist.genres.map((genre) => (
                   <span
                     key={genre}
-                    className="px-2 py-1 text-xs bg-[#d9657c]/20 text-[#d9657c] rounded-full"
+                    className="px-2 py-1 text-xs bg-[#ba326b]/20 text-[#ba326b] rounded-full"
                   >
                     {genre}
                   </span>
@@ -85,7 +85,7 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
                   href={artist.spotify}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[#d9657c] hover:underline"
+                  className="text-sm text-[#ba326b] hover:underline"
                 >
                   Spotify
                 </a>
@@ -95,7 +95,7 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
                   href={artist.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[#d9657c]/80 hover:underline"
+                  className="text-sm text-[#ba326b]/80 hover:underline"
                 >
                   Website
                 </a>
@@ -112,7 +112,7 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
             </h2>
             <button
               onClick={() => setShowForm(true)}
-              className="px-4 py-2 bg-[#d9657c] text-white rounded-lg text-sm font-medium hover:bg-[#c45a6f]"
+              className="px-4 py-2 bg-[#ba326b] text-white rounded-lg text-sm font-medium hover:bg-[#9a2858]"
             >
               + Add Member
             </button>
@@ -124,7 +124,7 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
               ))}
             </div>
           ) : (
-            <p className="text-[#4c222a]/60 py-8 text-center border border-dashed border-[#d9657c]/30 rounded-xl">
+            <p className="text-[#4c222a]/60 py-8 text-center border border-dashed border-[#ba326b]/30 rounded-xl">
               No members listed yet. Be the first to add one!
             </p>
           )}
@@ -135,7 +135,7 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
           <section>
             <button
               onClick={() => setShowPast(!showPast)}
-              className="flex items-center gap-2 text-lg font-semibold mb-4 text-[#4c222a] hover:text-[#d9657c]"
+              className="flex items-center gap-2 text-lg font-semibold mb-4 text-[#4c222a] hover:text-[#ba326b]"
             >
               <span className={`transition-transform ${showPast ? "rotate-90" : ""}`}>▶</span>
               Past Members ({pastMembers.length})
@@ -155,7 +155,7 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
           <div className="w-full max-w-md bg-white rounded-2xl shadow-xl max-h-[90vh] overflow-auto">
-            <div className="p-6 border-b border-[#d9657c]/20">
+            <div className="p-6 border-b border-[#ba326b]/20">
               <h2 className="text-xl font-semibold text-[#4c222a]">Add a Band Member</h2>
               <p className="text-sm text-[#4c222a]/60">for {artist.name}</p>
             </div>
@@ -173,13 +173,13 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
       )}
 
       {/* Footer */}
-      <footer className="border-t border-[#d9657c]/20 mt-16">
+      <footer className="border-t border-[#ba326b]/20 mt-16">
         <div className="max-w-4xl mx-auto px-4 py-6 text-center text-sm text-[#4c222a]/50">
           <a
             href={`https://knokr.com/a/${artist.slug}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[#d9657c] hover:underline"
+            className="text-[#ba326b] hover:underline"
           >
             View {artist.name} on Knokr →
           </a>

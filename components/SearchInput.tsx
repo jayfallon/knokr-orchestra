@@ -68,16 +68,16 @@ export default function SearchInput() {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search for an artist or band..."
-        className="w-full px-6 py-4 text-lg text-[#4c222a] bg-white border-2 border-[#d9657c]/30 rounded-full focus:outline-none focus:border-[#d9657c] placeholder:text-[#4c222a]/40"
+        className="w-full px-6 py-4 text-lg text-[#4c222a] bg-white border-2 border-[#ba326b]/30 rounded-full focus:outline-none focus:border-[#ba326b] placeholder:text-[#4c222a]/40"
       />
       {loading && (
         <div className="absolute right-4 top-1/2 -translate-y-1/2">
-          <div className="w-5 h-5 border-2 border-[#d9657c]/30 border-t-[#d9657c] rounded-full animate-spin" />
+          <div className="w-5 h-5 border-2 border-[#ba326b]/30 border-t-[#ba326b] rounded-full animate-spin" />
         </div>
       )}
 
       {isOpen && results.length > 0 && (
-        <ul className="absolute z-10 w-full mt-2 bg-white border border-[#d9657c]/20 rounded-xl shadow-lg max-h-96 overflow-auto">
+        <ul className="absolute z-10 w-full mt-2 bg-white border border-[#ba326b]/20 rounded-xl shadow-lg max-h-96 overflow-auto">
           {results.map((artist) => (
             <li key={artist.id}>
               <button
@@ -92,7 +92,7 @@ export default function SearchInput() {
                     style={{ aspectRatio: "1.618 / 1" }}
                   />
                 ) : (
-                  <div className="w-16 h-10 rounded bg-[#d9657c]/20 flex items-center justify-center text-[#d9657c]" style={{ aspectRatio: "1.618 / 1" }}>
+                  <div className="w-16 h-10 rounded bg-[#ba326b]/20 flex items-center justify-center text-[#ba326b]" style={{ aspectRatio: "1.618 / 1" }}>
                     {artist.name[0]}
                   </div>
                 )}
@@ -109,7 +109,7 @@ export default function SearchInput() {
       )}
 
       {isOpen && query.length >= 2 && results.length === 0 && !loading && (
-        <div className="absolute z-10 w-full mt-2 px-4 py-3 bg-white border border-[#d9657c]/20 rounded-xl shadow-lg text-[#4c222a]/60">
+        <div className="absolute z-10 w-full mt-2 px-4 py-3 bg-white border border-[#ba326b]/20 rounded-xl shadow-lg text-[#4c222a]/60">
           No artists found
         </div>
       )}

@@ -73,7 +73,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
   if (success) {
     return (
       <div className="p-6 text-center">
-        <div className="text-4xl mb-4 text-[#d9657c]">✓</div>
+        <div className="text-4xl mb-4 text-[#ba326b]">✓</div>
         <h3 className="text-xl font-semibold mb-2 text-[#4c222a]">Thank you!</h3>
         <p className="text-[#4c222a]/60 mb-4">Your submission is pending review.</p>
         <button
@@ -81,7 +81,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
             setSuccess(false);
             onClose?.();
           }}
-          className="px-4 py-2 bg-[#d9657c] text-white rounded-lg hover:bg-[#c45a6f]"
+          className="px-4 py-2 bg-[#ba326b] text-white rounded-lg hover:bg-[#9a2858]"
         >
           Close
         </button>
@@ -106,7 +106,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
           type="text"
           name="name"
           required
-          className="w-full px-3 py-2 border border-[#d9657c]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d9657c]/50 text-[#4c222a]"
+          className="w-full px-3 py-2 border border-[#ba326b]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ba326b]/50 text-[#4c222a]"
         />
       </div>
 
@@ -115,7 +115,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
         <select
           name="role"
           required
-          className="w-full px-3 py-2 border border-[#d9657c]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d9657c]/50 text-[#4c222a]"
+          className="w-full px-3 py-2 border border-[#ba326b]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ba326b]/50 text-[#4c222a]"
         >
           <option value="">Select a role</option>
           {MEMBER_ROLES.map((role) => (
@@ -132,7 +132,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
           name="isActive"
           id="isActive"
           defaultChecked
-          className="rounded border-[#d9657c]/30 text-[#d9657c] focus:ring-[#d9657c]"
+          className="rounded border-[#ba326b]/30 text-[#ba326b] focus:ring-[#ba326b]"
         />
         <label htmlFor="isActive" className="text-sm text-[#4c222a]">Currently active member</label>
       </div>
@@ -145,7 +145,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
             name="startYear"
             min="1900"
             max={new Date().getFullYear()}
-            className="w-full px-3 py-2 border border-[#d9657c]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d9657c]/50 text-[#4c222a]"
+            className="w-full px-3 py-2 border border-[#ba326b]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ba326b]/50 text-[#4c222a]"
           />
         </div>
         <div>
@@ -155,7 +155,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
             name="endYear"
             min="1900"
             max={new Date().getFullYear()}
-            className="w-full px-3 py-2 border border-[#d9657c]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d9657c]/50 text-[#4c222a]"
+            className="w-full px-3 py-2 border border-[#ba326b]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ba326b]/50 text-[#4c222a]"
           />
         </div>
       </div>
@@ -166,7 +166,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
           type="url"
           name="imageUrl"
           placeholder="https://..."
-          className="w-full px-3 py-2 border border-[#d9657c]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d9657c]/50 text-[#4c222a] placeholder:text-[#4c222a]/40"
+          className="w-full px-3 py-2 border border-[#ba326b]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ba326b]/50 text-[#4c222a] placeholder:text-[#4c222a]/40"
         />
       </div>
 
@@ -176,7 +176,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
           type="url"
           name="wikipediaUrl"
           placeholder="https://en.wikipedia.org/wiki/..."
-          className="w-full px-3 py-2 border border-[#d9657c]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d9657c]/50 text-[#4c222a] placeholder:text-[#4c222a]/40"
+          className="w-full px-3 py-2 border border-[#ba326b]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ba326b]/50 text-[#4c222a] placeholder:text-[#4c222a]/40"
         />
       </div>
 
@@ -186,7 +186,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
           name="note"
           rows={2}
           placeholder="Any additional information..."
-          className="w-full px-3 py-2 border border-[#d9657c]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d9657c]/50 text-[#4c222a] placeholder:text-[#4c222a]/40 resize-none"
+          className="w-full px-3 py-2 border border-[#ba326b]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ba326b]/50 text-[#4c222a] placeholder:text-[#4c222a]/40 resize-none"
         />
       </div>
 
@@ -206,7 +206,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 px-4 py-2 border border-[#d9657c]/30 text-[#4c222a] rounded-lg hover:bg-[#fdf5d4]"
+            className="flex-1 px-4 py-2 border border-[#ba326b]/30 text-[#4c222a] rounded-lg hover:bg-[#fdf5d4]"
           >
             Cancel
           </button>
@@ -214,7 +214,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 px-4 py-2 bg-[#d9657c] text-white rounded-lg hover:bg-[#c45a6f] disabled:opacity-50"
+          className="flex-1 px-4 py-2 bg-[#ba326b] text-white rounded-lg hover:bg-[#9a2858] disabled:opacity-50"
         >
           {loading ? "Submitting..." : "Submit"}
         </button>

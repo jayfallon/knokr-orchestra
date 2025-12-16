@@ -9,7 +9,7 @@ export default function Home() {
       <div className="absolute top-4 right-4">
         <SignedOut>
           <SignInButton mode="modal">
-            <button className="px-4 py-2 text-sm text-[#d9657c] hover:text-[#4c222a] border border-[#d9657c]/30 hover:border-[#d9657c]/50 rounded-lg transition-colors">
+            <button className="px-4 py-2 text-sm text-[#ba326b] hover:text-[#4c222a] border border-[#ba326b]/30 hover:border-[#ba326b]/50 rounded-lg transition-colors">
               Sign In
             </button>
           </SignInButton>
@@ -33,7 +33,7 @@ export default function Home() {
             alt="Knokr"
             className="w-[180px] h-auto mb-5 mx-auto"
           />
-          <h1 className="text-[42px] font-extrabold text-[#d9657c] tracking-tight">
+          <h1 className="text-[42px] font-extrabold text-[#ba326b] tracking-tight">
             Who&apos;s in the Band?
           </h1>
           <p className="text-[#4c222a]/70 text-base mt-2">
@@ -45,14 +45,14 @@ export default function Home() {
         <SuggestBand />
 
         {/* Footer */}
-        <footer className="mt-10 pt-6 text-center text-sm text-[#4c222a]/50 border-t border-[#d9657c]/20 w-full">
+        <footer className="mt-10 pt-6 text-center text-sm text-[#4c222a]/50 border-t border-[#ba326b]/20 w-full">
           <div className="mb-3">
-            <a href="/terms" className="text-[#d9657c] mx-3 hover:underline">
+            <a href="/terms" className="text-[#ba326b] mx-3 hover:underline">
               Terms of Service
             </a>
             <a
               href="/privacy"
-              className="text-[#d9657c] mx-3 hover:underline"
+              className="text-[#ba326b] mx-3 hover:underline"
             >
               Privacy & Data
             </a>
@@ -63,7 +63,7 @@ export default function Home() {
               href="https://knokr.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#d9657c] hover:underline"
+              className="text-[#ba326b] hover:underline"
             >
               Knokr
             </a>
