@@ -12,6 +12,11 @@ export function getArtistImageUrl(imageUrl: string | null): string | null {
     // Return null for non-CloudFront URLs to show placeholder instead of broken image
     return null;
   }
+  // New format: full relative path (e.g., media/artists/sergio-pizzorno/1765911115207-1yie5n.jpg)
+  if (imageUrl.startsWith("media/")) {
+    return `${CLOUDFRONT_URL}/${imageUrl}`;
+  }
+  // Old format: just filename (e.g., oasis-1754131743539) → transformed/artists/images/{filename}.webp
   const filename = imageUrl.split(".")[0];
   return `${CLOUDFRONT_URL}/transformed/artists/images/${filename}.webp`;
 }
