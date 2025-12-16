@@ -13,8 +13,9 @@ export function getArtistImageUrl(imageUrl: string | null): string | null {
     return null;
   }
   // New format: full relative path (e.g., media/artists/sergio-pizzorno/1765911115207-1yie5n.jpg)
-  if (imageUrl.startsWith("media/")) {
-    return `${CLOUDFRONT_URL}/${imageUrl}`;
+  if (imageUrl.startsWith("media/") || imageUrl.startsWith("/media/")) {
+    const path = imageUrl.startsWith("/") ? imageUrl : `/${imageUrl}`;
+    return `${CLOUDFRONT_URL}${path}`;
   }
   // Old format: just filename (e.g., oasis-1754131743539) → transformed/artists/images/{filename}.webp
   const filename = imageUrl.split(".")[0];
