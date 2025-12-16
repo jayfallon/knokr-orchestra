@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import { memberSubmissionSchema } from "@/lib/validation";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { verifyTurnstileToken } from "@/lib/turnstile";
 import { NextRequest } from "next/server";
 import { headers } from "next/headers";
 
@@ -42,6 +43,23 @@ export async function POST(
     // Honeypot check (bot detection)
     if (data.honeypot) {
       return Response.json({ success: true, message: "Member submitted for review" });
+    }
+
+    // Verify Turnstile CAPTCHA
+    if (data.turnstileToken) {
+      const isValid = await verifyTurnstileToken(data.turnstileToken, ip);
+      if (!isValid) {
+        return Response.json(
+          { error: "CAPTCHA verification failed" },
+          { status: 400 }
+        );
+      }
+    } else if (process.env.TURNSTILE_SECRET_KEY) {
+      // Only require token if Turnstile is configured
+      return Response.json(
+        { error: "CAPTCHA required" },
+        { status: 400 }
+      );
     }
 
     // Verify artist exists

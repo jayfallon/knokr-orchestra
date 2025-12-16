@@ -2,7 +2,7 @@ import SearchInput from "@/components/SearchInput";
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gradient-to-b from-[#d9657c] to-[#681021] px-5 py-10">
+    <div className="min-h-screen flex flex-col items-center bg-gradient-to-b from-[#d9657c] to-[#621827] px-5 py-10">
       <div className="w-full max-w-[500px] flex flex-col items-center pt-10">
         {/* Header */}
         <header className="text-center mb-8">

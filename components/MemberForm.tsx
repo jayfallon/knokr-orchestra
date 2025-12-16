@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import { MEMBER_ROLES } from "@/lib/validation";
 
 interface Props {
@@ -13,9 +14,17 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileRef = useRef<TurnstileInstance>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!turnstileToken) {
+      setError("Please complete the CAPTCHA");
+      return;
+    }
+
     setLoading(true);
     setError("");
 
@@ -32,6 +41,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
       wikipediaUrl: formData.get("wikipediaUrl") || null,
       note: formData.get("note") || null,
       honeypot: formData.get("website"), // Honeypot field
+      turnstileToken,
     };
 
     try {
@@ -48,9 +58,13 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
 
       setSuccess(true);
       form.reset();
+      setTurnstileToken(null);
+      turnstileRef.current?.reset();
       onSuccess?.();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
+      turnstileRef.current?.reset();
+      setTurnstileToken(null);
     } finally {
       setLoading(false);
     }
@@ -173,6 +187,17 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
           rows={2}
           placeholder="Any additional information..."
           className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-500 resize-none"
+        />
+      </div>
+
+      {/* Cloudflare Turnstile CAPTCHA */}
+      <div className="flex justify-center">
+        <Turnstile
+          ref={turnstileRef}
+          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+          onSuccess={setTurnstileToken}
+          onError={() => setError("CAPTCHA failed. Please try again.")}
+          onExpire={() => setTurnstileToken(null)}
         />
       </div>
 
