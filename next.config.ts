@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         hostname: "d381oh62lm94pz.cloudfront.net",
         pathname: "/transformed/**",
       },
+      {
+        protocol: "https",
+        hostname: "d381oh62lm94pz.cloudfront.net",
+        pathname: "/media/**",
+      },
     ],
   },
 };
