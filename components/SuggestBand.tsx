@@ -29,18 +29,20 @@ export default function SuggestBand() {
   };
 
   const googleSearchUrl = artist
-    ? `https://www.google.com/search?q=${encodeURIComponent(artist.name + " band wikipedia")}`
+    ? `https://www.google.com/search?q=${encodeURIComponent(
+        artist.name + " band wikipedia"
+      )}`
     : null;
 
   return (
-    <div className="mt-6 text-center">
+    <div className="text-center">
       {!artist ? (
         <button
           onClick={fetchRandom}
           disabled={loading}
-          className="px-4 py-2 text-sm text-[#ba326b] hover:text-[#4c222a] border border-[#ba326b]/30 hover:border-[#ba326b]/50 rounded-lg transition-colors disabled:opacity-50"
+          className="px-6 py-2.5 text-sm bg-[#610553] text-[#fdf5d4] rounded-full hover:bg-[#4a0440] transition-colors disabled:opacity-50 cursor-pointer uppercase tracking-wide"
         >
-          {loading ? "Finding..." : "Suggest a band"}
+          {loading ? "Finding..." : "Random"}
         </button>
       ) : (
         <div className="p-4 bg-white rounded-xl border border-[#ba326b]/20">

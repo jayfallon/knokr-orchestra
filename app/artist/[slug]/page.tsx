@@ -49,6 +49,22 @@ export default async function ArtistPage({ params }: PageProps) {
         },
         orderBy: [{ isActive: "desc" }, { startYear: "asc" }],
       },
+      connections: {
+        select: {
+          connectedArtist: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              imageUrl: true,
+              location: true,
+            },
+          },
+          weight: true,
+        },
+        orderBy: { weight: "desc" },
+        take: 8,
+      },
     },
   });
 
@@ -56,12 +72,14 @@ export default async function ArtistPage({ params }: PageProps) {
 
   const currentMembers = artist.members.filter((m) => m.isActive);
   const pastMembers = artist.members.filter((m) => !m.isActive);
+  const relatedArtists = artist.connections.map((c) => c.connectedArtist);
 
   return (
     <ArtistContent
       artist={artist}
       currentMembers={currentMembers}
       pastMembers={pastMembers}
+      relatedArtists={relatedArtists}
     />
   );
 }

@@ -1,3 +1,7 @@
+"use client";
+
+import Image from "next/image";
+import { Card, CardBody, Chip } from "@heroui/react";
 import { getArtistImageUrl } from "@/lib/image";
 
 interface Member {
@@ -16,43 +20,74 @@ export default function MemberCard({ member }: { member: Member }) {
     member.startYear && member.endYear
       ? `${member.startYear}–${member.endYear}`
       : member.startYear
-        ? `${member.startYear}–present`
-        : null;
+      ? `${member.startYear}–present`
+      : null;
+
+  const imageUrl = getArtistImageUrl(member.imageUrl);
 
   return (
-    <div className="flex items-center gap-4 p-4 bg-white rounded-xl border border-[#ba326b]/20">
-      {getArtistImageUrl(member.imageUrl) ? (
-        <img
-          src={getArtistImageUrl(member.imageUrl)!}
-          alt={member.name}
-          className="w-16 rounded object-cover"
-          style={{ aspectRatio: "1.618 / 1" }}
-        />
-      ) : (
-        <div className="w-16 rounded bg-[#ba326b]/20 flex items-center justify-center text-xl text-[#ba326b]" style={{ aspectRatio: "1.618 / 1" }}>
-          {member.name[0]}
-        </div>
-      )}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          {member.wikipediaUrl ? (
-            <a
-              href={member.wikipediaUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-[#4c222a] hover:text-[#ba326b] hover:underline"
-            >
-              {member.name}
-            </a>
+    <Card className="h-full transition-all duration-200 hover:shadow-lg hover:scale-[1.02] rounded-xl bg-white border border-[#ba326b]/10">
+      <CardBody className="p-0">
+        {/* Image */}
+        <div className="relative overflow-hidden rounded-t-xl" style={{ aspectRatio: "1.618 / 1" }}>
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt={member.name}
+              fill
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+              className="object-cover transition-transform duration-300 hover:scale-105"
+            />
           ) : (
-            <span className="font-medium text-[#4c222a]">{member.name}</span>
+            <div className="flex w-full h-full items-center justify-center bg-gradient-to-br from-[#610553]/20 to-[#ba326b]/20">
+              <svg
+                className="h-1/3 w-1/3 text-[#ba326b]/50"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-label={`Placeholder image for ${member.name}`}
+              >
+                <path
+                  d="M9 18V5l12-2v13"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <circle cx="6" cy="18" r="3" stroke="currentColor" strokeWidth="2" />
+                <circle cx="18" cy="16" r="3" stroke="currentColor" strokeWidth="2" />
+              </svg>
+            </div>
+          )}
+          {/* Years badge */}
+          {years && (
+            <div className="absolute bottom-2 right-2">
+              <Chip
+                size="sm"
+                variant="flat"
+                className="bg-[#610553]/90 text-[#fdf5d4] text-xs"
+              >
+                {years}
+              </Chip>
+            </div>
           )}
         </div>
-        <p className="text-sm text-[#4c222a]/70 capitalize">
-          {member.role}
-          {years && <span className="ml-2 text-[#4c222a]/50">({years})</span>}
-        </p>
-      </div>
-    </div>
+
+        {/* Content */}
+        <div className="p-4 bg-gradient-to-b from-white to-[#fdf5d4]/50">
+          <a
+            href={`https://knokr.com/a/${member.name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-lg font-semibold text-[#4c222a] hover:text-[#ba326b] line-clamp-1 block"
+          >
+            {member.name}
+          </a>
+          <p className="text-sm text-[#4c222a]/60 capitalize line-clamp-1">
+            {member.role}
+          </p>
+        </div>
+      </CardBody>
+    </Card>
   );
 }

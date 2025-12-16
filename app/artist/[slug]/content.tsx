@@ -29,96 +29,115 @@ interface Artist {
   spotify: string | null;
 }
 
+interface RelatedArtist {
+  id: string;
+  name: string;
+  slug: string;
+  imageUrl: string | null;
+  location: string;
+}
+
 interface Props {
   artist: Artist;
   currentMembers: Member[];
   pastMembers: Member[];
+  relatedArtists: RelatedArtist[];
 }
 
-export default function ArtistContent({ artist, currentMembers, pastMembers }: Props) {
+export default function ArtistContent({ artist, currentMembers, pastMembers, relatedArtists }: Props) {
   const [showForm, setShowForm] = useState(false);
-  const [showPast, setShowPast] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#fdf5d4]">
       <header className="border-b border-[#ba326b]/20">
-        <div className="max-w-4xl mx-auto px-4 py-4">
+        <div className="max-w-7xl mx-auto px-4 py-4">
           <Link href="/" className="text-sm text-[#ba326b] hover:text-[#4c222a]">
             ← Back to search
           </Link>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-8">
-        {/* Artist Header */}
-        <div className="flex flex-col sm:flex-row gap-6 mb-8">
-          {getArtistImageUrl(artist.imageUrl) ? (
-            <img
-              src={getArtistImageUrl(artist.imageUrl)!}
-              alt={artist.name}
-              className="w-48 sm:w-56 rounded-xl object-cover flex-shrink-0"
-              style={{ aspectRatio: "1.618 / 1" }}
-            />
-          ) : (
-            <div className="w-48 sm:w-56 rounded-xl bg-[#ba326b]/20 flex items-center justify-center text-4xl text-[#ba326b] flex-shrink-0" style={{ aspectRatio: "1.618 / 1" }}>
-              {artist.name[0]}
+      {/* Hero Image */}
+      {getArtistImageUrl(artist.imageUrl) ? (
+        <div className="flex justify-center mb-8">
+          <img
+            src={getArtistImageUrl(artist.imageUrl)!}
+            alt={artist.name}
+            className="w-full max-w-7xl rounded-xl object-cover"
+            style={{ aspectRatio: "1.618 / 1" }}
+          />
+        </div>
+      ) : (
+        <div className="flex justify-center mb-8">
+          <div className="w-full max-w-7xl rounded-xl bg-[#ba326b]/20 flex items-center justify-center text-6xl text-[#ba326b]" style={{ aspectRatio: "1.618 / 1" }}>
+            {artist.name[0]}
+          </div>
+        </div>
+      )}
+
+      <main className="max-w-7xl mx-auto px-4 py-8">
+        {/* Artist Info */}
+        <div className="mb-8 text-center">
+          <a
+            href={`https://knokr.com/a/${artist.slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-5xl md:text-6xl font-bold mb-3 text-[#4c222a] hover:text-[#ba326b] block uppercase tracking-wide"
+          >
+            {artist.name}
+          </a>
+          <p className="text-lg text-[#4c222a]/70 mb-4 uppercase tracking-wider">{artist.location}</p>
+          {artist.genres.length > 0 && (
+            <div className="flex flex-wrap justify-center gap-2 mb-4">
+              {artist.genres.map((genre) => (
+                <span
+                  key={genre}
+                  className="px-3 py-1.5 text-sm bg-[#ba326b]/20 text-[#ba326b] rounded-full uppercase tracking-wide"
+                >
+                  {genre}
+                </span>
+              ))}
             </div>
           )}
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold mb-2 text-[#4c222a]">{artist.name}</h1>
-            <p className="text-[#4c222a]/70 mb-2">{artist.location}</p>
-            {artist.genres.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-4">
-                {artist.genres.map((genre) => (
-                  <span
-                    key={genre}
-                    className="px-2 py-1 text-xs bg-[#ba326b]/20 text-[#ba326b] rounded-full"
-                  >
-                    {genre}
-                  </span>
-                ))}
-              </div>
+          <div className="flex justify-center gap-4">
+            {artist.spotify && (
+              <a
+                href={artist.spotify}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-base text-[#ba326b] hover:underline uppercase tracking-wide"
+              >
+                Spotify
+              </a>
             )}
-            <div className="flex gap-3">
-              {artist.spotify && (
-                <a
-                  href={artist.spotify}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-[#ba326b] hover:underline"
-                >
-                  Spotify
-                </a>
-              )}
-              {artist.website && (
-                <a
-                  href={artist.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-[#ba326b]/80 hover:underline"
-                >
-                  Website
-                </a>
-              )}
-            </div>
+            {artist.website && (
+              <a
+                href={artist.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-base text-[#ba326b]/80 hover:underline uppercase tracking-wide"
+              >
+                Website
+              </a>
+            )}
           </div>
         </div>
 
         {/* Current Members */}
-        <section className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-[#4c222a]">
+        <section className="mb-12">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-3xl font-semibold text-[#4c222a] uppercase tracking-wide">
               Current Members {currentMembers.length > 0 && `(${currentMembers.length})`}
             </h2>
             <button
               onClick={() => setShowForm(true)}
-              className="px-4 py-2 bg-[#ba326b] text-white rounded-lg text-sm font-medium hover:bg-[#9a2858]"
+              className="px-6 py-2.5 bg-[#610553] text-[#fdf5d4] rounded-full text-sm font-medium hover:bg-[#4a0440] cursor-pointer uppercase tracking-wide"
             >
               + Add Member
             </button>
           </div>
           {currentMembers.length > 0 ? (
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {currentMembers.map((member) => (
                 <MemberCard key={member.id} member={member} />
               ))}
@@ -130,23 +149,59 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
           )}
         </section>
 
-        {/* Past Members */}
+        {/* Former Members */}
         {pastMembers.length > 0 && (
-          <section>
-            <button
-              onClick={() => setShowPast(!showPast)}
-              className="flex items-center gap-2 text-lg font-semibold mb-4 text-[#4c222a] hover:text-[#ba326b]"
-            >
-              <span className={`transition-transform ${showPast ? "rotate-90" : ""}`}>▶</span>
-              Past Members ({pastMembers.length})
-            </button>
-            {showPast && (
-              <div className="grid gap-3 sm:grid-cols-2">
-                {pastMembers.map((member) => (
-                  <MemberCard key={member.id} member={member} />
-                ))}
-              </div>
-            )}
+          <section className="mb-12">
+            <h2 className="text-3xl font-semibold text-[#4c222a] mb-6 uppercase tracking-wide">
+              Former Members ({pastMembers.length})
+            </h2>
+            <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              {pastMembers.map((member) => (
+                <MemberCard key={member.id} member={member} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Related Artists */}
+        {relatedArtists.length > 0 && (
+          <section className="mb-12">
+            <h2 className="text-3xl font-semibold text-[#4c222a] mb-6 uppercase tracking-wide">
+              Related Artists
+            </h2>
+            <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              {relatedArtists.map((related) => (
+                <Link
+                  key={related.id}
+                  href={`/artist/${related.slug}`}
+                  className="group"
+                >
+                  <div className="h-full transition-all duration-200 hover:shadow-lg hover:scale-[1.02] rounded-xl bg-white border border-[#ba326b]/10 overflow-hidden">
+                    <div className="relative overflow-hidden rounded-t-xl" style={{ aspectRatio: "1.618 / 1" }}>
+                      {getArtistImageUrl(related.imageUrl) ? (
+                        <img
+                          src={getArtistImageUrl(related.imageUrl)!}
+                          alt={related.name}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="flex w-full h-full items-center justify-center bg-gradient-to-br from-[#610553]/20 to-[#ba326b]/20 text-4xl text-[#ba326b]">
+                          {related.name[0]}
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-4 bg-gradient-to-b from-white to-[#fdf5d4]/50">
+                      <p className="text-lg font-semibold text-[#4c222a] group-hover:text-[#ba326b] line-clamp-1">
+                        {related.name}
+                      </p>
+                      <p className="text-sm text-[#4c222a]/60 line-clamp-1">
+                        {related.location}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </section>
         )}
       </main>
@@ -172,19 +227,6 @@ export default function ArtistContent({ artist, currentMembers, pastMembers }: P
         </div>
       )}
 
-      {/* Footer */}
-      <footer className="border-t border-[#ba326b]/20 mt-16">
-        <div className="max-w-4xl mx-auto px-4 py-6 text-center text-sm text-[#4c222a]/50">
-          <a
-            href={`https://knokr.com/a/${artist.slug}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[#ba326b] hover:underline"
-          >
-            View {artist.name} on Knokr →
-          </a>
-        </div>
-      </footer>
     </div>
   );
 }

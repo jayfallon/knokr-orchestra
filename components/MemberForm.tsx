@@ -81,7 +81,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
             setSuccess(false);
             onClose?.();
           }}
-          className="px-4 py-2 bg-[#ba326b] text-white rounded-lg hover:bg-[#9a2858]"
+          className="px-6 py-2.5 bg-[#610553] text-[#fdf5d4] rounded-full hover:bg-[#4a0440] cursor-pointer"
         >
           Close
         </button>
@@ -206,7 +206,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 px-4 py-2 border border-[#ba326b]/30 text-[#4c222a] rounded-lg hover:bg-[#fdf5d4]"
+            className="flex-1 px-4 py-2.5 bg-[#fdf5d4] text-[#610553] rounded-full hover:bg-[#f5ebb8] cursor-pointer"
           >
             Cancel
           </button>
@@ -214,7 +214,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 px-4 py-2 bg-[#ba326b] text-white rounded-lg hover:bg-[#9a2858] disabled:opacity-50"
+          className="flex-1 px-4 py-2.5 bg-[#610553] text-[#fdf5d4] rounded-full hover:bg-[#4a0440] disabled:opacity-50 cursor-pointer"
         >
           {loading ? "Submitting..." : "Submit"}
         </button>

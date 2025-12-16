@@ -9,7 +9,7 @@ export default function Home() {
       <div className="absolute top-4 right-4">
         <SignedOut>
           <SignInButton mode="modal">
-            <button className="px-4 py-2 text-sm text-[#ba326b] hover:text-[#4c222a] border border-[#ba326b]/30 hover:border-[#ba326b]/50 rounded-lg transition-colors">
+            <button className="px-5 py-2 text-sm text-[#ba326b] hover:text-[#4c222a] border border-[#ba326b]/30 hover:border-[#ba326b]/50 rounded-full transition-colors">
               Sign In
             </button>
           </SignInButton>
@@ -42,6 +42,7 @@ export default function Home() {
         </header>
 
         <SearchInput />
+        <p className="text-[#4c222a]/70 text-base my-4">or</p>
         <SuggestBand />
 
         {/* Footer */}
@@ -50,10 +51,7 @@ export default function Home() {
             <a href="/terms" className="text-[#ba326b] mx-3 hover:underline">
               Terms of Service
             </a>
-            <a
-              href="/privacy"
-              className="text-[#ba326b] mx-3 hover:underline"
-            >
+            <a href="/privacy" className="text-[#ba326b] mx-3 hover:underline">
               Privacy & Data
             </a>
           </div>
