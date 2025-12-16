@@ -70,8 +70,22 @@ export default async function ArtistPage({ params }: PageProps) {
 
   if (!artist) notFound();
 
-  const currentMembers = artist.members.filter((m) => m.isActive);
-  const pastMembers = artist.members.filter((m) => !m.isActive);
+  // Look up artists that match member names to get their images
+  const memberNames = artist.members.map((m) => m.name);
+  const matchingArtists = await prisma.artist.findMany({
+    where: { name: { in: memberNames } },
+    select: { name: true, imageUrl: true },
+  });
+  const artistImageMap = new Map(matchingArtists.map((a) => [a.name, a.imageUrl]));
+
+  // Merge member data with artist images
+  const membersWithImages = artist.members.map((m) => ({
+    ...m,
+    imageUrl: m.imageUrl || artistImageMap.get(m.name) || null,
+  }));
+
+  const currentMembers = membersWithImages.filter((m) => m.isActive);
+  const pastMembers = membersWithImages.filter((m) => !m.isActive);
   const relatedArtists = artist.connections.map((c) => c.connectedArtist);
 
   return (
