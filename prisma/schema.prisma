@@ -31,8 +31,12 @@ model ArtistConnection {
   id                String   @id @default(cuid())
   artistId          String
   connectedArtistId String
-  weight            Float    @default(1.0)
-  sharedFestivals   Int      @default(1)
+  weight            Float    @default(0.0)
+  sharedFestivals   Int      @default(0)
+  sameCity          Boolean  @default(false)
+  sameRegion        Boolean  @default(false)
+  sharedGenres      Int      @default(0)
+  sharedMembers     Int      @default(0)
   lastUpdated       DateTime @default(now()) @updatedAt
 
   artist          Artist @relation("ArtistConnections", fields: [artistId], references: [id], onDelete: Cascade)
@@ -42,6 +46,7 @@ model ArtistConnection {
   @@index([artistId])
   @@index([connectedArtistId])
   @@index([weight])
+  @@index([sharedMembers])
 }
 
 model ArtistMember {

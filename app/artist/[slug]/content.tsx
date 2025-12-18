@@ -36,6 +36,7 @@ interface RelatedArtist {
   slug: string;
   imageUrl: string | null;
   location: string;
+  connectionReason: string;
 }
 
 interface Props {
@@ -83,14 +84,9 @@ export default function ArtistContent({ artist, currentMembers, pastMembers, rel
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* Artist Info */}
         <div className="mb-8 text-center">
-          <a
-            href={`https://knokr.com/a/${artist.slug}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-5xl md:text-6xl font-bold mb-3 text-[#4c222a] hover:text-[#ba326b] block uppercase tracking-wide"
-          >
+          <h1 className="text-5xl md:text-6xl font-bold mb-3 text-[#4c222a] block uppercase tracking-wide">
             {artist.name}
-          </a>
+          </h1>
           <p className="text-lg text-[#4c222a]/70 mb-4 uppercase tracking-wider">{artist.location}</p>
           {artist.genres.length > 0 && (
             <div className="flex flex-wrap justify-center gap-2 mb-4">
@@ -201,8 +197,8 @@ export default function ArtistContent({ artist, currentMembers, pastMembers, rel
                       <p className="text-lg font-semibold text-[#4c222a] group-hover:text-[#ba326b] line-clamp-1">
                         {related.name}
                       </p>
-                      <p className="text-sm text-[#4c222a]/60 line-clamp-1">
-                        {related.location}
+                      <p className="text-xs text-[#ba326b]/70 line-clamp-1">
+                        {related.connectionReason}
                       </p>
                     </div>
                   </div>

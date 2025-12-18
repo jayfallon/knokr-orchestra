@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Card, CardBody, Chip } from "@heroui/react";
 import { getArtistImageUrl } from "@/lib/image";
 
@@ -75,14 +76,12 @@ export default function MemberCard({ member }: { member: Member }) {
 
         {/* Content */}
         <div className="p-4 bg-gradient-to-b from-white to-[#fdf5d4]/50">
-          <a
-            href={`https://knokr.com/a/${member.name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")}`}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href={`/artist/${member.name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")}`}
             className="text-lg font-semibold text-[#4c222a] hover:text-[#ba326b] line-clamp-1 block"
           >
             {member.name}
-          </a>
+          </Link>
           <p className="text-sm text-[#4c222a]/60 capitalize line-clamp-1">
             {member.role}
           </p>

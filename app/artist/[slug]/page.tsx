@@ -61,9 +61,33 @@ export default async function ArtistPage({ params }: PageProps) {
             },
           },
           weight: true,
+          sharedFestivals: true,
+          sharedMembers: true,
+          sharedGenres: true,
+          sameCity: true,
+          sameRegion: true,
         },
         orderBy: { weight: "desc" },
-        take: 8,
+      },
+      connectedBy: {
+        select: {
+          artist: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              imageUrl: true,
+              location: true,
+            },
+          },
+          weight: true,
+          sharedFestivals: true,
+          sharedMembers: true,
+          sharedGenres: true,
+          sameCity: true,
+          sameRegion: true,
+        },
+        orderBy: { weight: "desc" },
       },
     },
   });
@@ -89,7 +113,54 @@ export default async function ArtistPage({ params }: PageProps) {
 
   const currentMembers = membersWithArtistData.filter((m) => m.isActive);
   const pastMembers = membersWithArtistData.filter((m) => !m.isActive);
-  const relatedArtists = artist.connections.map((c) => c.connectedArtist);
+
+  // Combine both directions of connections, dedupe by id, sort by weight
+  // Exclude artists that are also members, limit to 24
+  const memberNameSet = new Set(memberNames);
+  const allConnections = [
+    ...artist.connections.map((c) => ({
+      artist: c.connectedArtist,
+      weight: c.weight,
+      sharedFestivals: c.sharedFestivals,
+      sharedMembers: c.sharedMembers,
+      sharedGenres: c.sharedGenres,
+      sameCity: c.sameCity,
+      sameRegion: c.sameRegion,
+    })),
+    ...artist.connectedBy.map((c) => ({
+      artist: c.artist,
+      weight: c.weight,
+      sharedFestivals: c.sharedFestivals,
+      sharedMembers: c.sharedMembers,
+      sharedGenres: c.sharedGenres,
+      sameCity: c.sameCity,
+      sameRegion: c.sameRegion,
+    })),
+  ];
+  const seen = new Set<string>();
+  const relatedArtists = allConnections
+    .sort((a, b) => b.weight - a.weight)
+    .filter((c) => {
+      if (seen.has(c.artist.id)) return false;
+      if (memberNameSet.has(c.artist.name)) return false;
+      seen.add(c.artist.id);
+      return true;
+    })
+    .slice(0, 24)
+    .map((c) => ({
+      ...c.artist,
+      connectionReason: getConnectionReason(c),
+    }));
+
+  function getConnectionReason(c: { sharedFestivals: number; sharedMembers: number; sharedGenres: number; sameCity: boolean; sameRegion: boolean }) {
+    const reasons: string[] = [];
+    if (c.sharedMembers > 0) reasons.push(`${c.sharedMembers} shared member${c.sharedMembers > 1 ? "s" : ""}`);
+    if (c.sharedFestivals > 0) reasons.push(`${c.sharedFestivals} shared festival${c.sharedFestivals > 1 ? "s" : ""}`);
+    if (c.sameCity) reasons.push("same city");
+    if (c.sameRegion && !c.sameCity) reasons.push("same region");
+    if (c.sharedGenres > 0) reasons.push(`${c.sharedGenres} shared genre${c.sharedGenres > 1 ? "s" : ""}`);
+    return reasons.join(" · ") || "related";
+  }
 
   return (
     <ArtistContent
