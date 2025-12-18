@@ -197,9 +197,6 @@ export default function ArtistContent({ artist, currentMembers, pastMembers, rel
                       <p className="text-lg font-semibold text-[#4c222a] group-hover:text-[#ba326b] line-clamp-1">
                         {related.name}
                       </p>
-                      <p className="text-xs text-[#ba326b]/70 line-clamp-1">
-                        {related.connectionReason}
-                      </p>
                     </div>
                   </div>
                 </Link>
