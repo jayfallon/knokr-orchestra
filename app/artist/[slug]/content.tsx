@@ -24,10 +24,23 @@ interface Artist {
   slug: string;
   imageUrl: string | null;
   genres: string[];
-  location: string;
+  city: string;
+  region: string | null;
+  country: string;
   bio: string | null;
   website: string | null;
   spotify: string | null;
+}
+
+function formatLocation(artist: Artist): string {
+  const country = artist.country.toLowerCase();
+  const isUSA = country === 'united states' || country === 'us' || country === 'usa';
+  const isUK = country === 'united kingdom' || country === 'uk';
+
+  if (isUSA || isUK) {
+    return [artist.city, artist.region].filter(Boolean).join(', ');
+  }
+  return [artist.city, artist.country].filter(Boolean).join(', ');
 }
 
 interface RelatedArtist {
@@ -87,7 +100,7 @@ export default function ArtistContent({ artist, currentMembers, pastMembers, rel
           <h1 className="text-5xl md:text-6xl font-bold mb-3 text-[#4c222a] block uppercase tracking-wide">
             {artist.name}
           </h1>
-          <p className="text-lg text-[#4c222a]/70 mb-4 uppercase tracking-wider">{artist.location}</p>
+          <p className="text-lg text-[#4c222a]/70 mb-4 uppercase tracking-wider">{formatLocation(artist)}</p>
           {artist.genres.length > 0 && (
             <div className="flex flex-wrap justify-center gap-2 mb-4">
               {artist.genres.map((genre) => (

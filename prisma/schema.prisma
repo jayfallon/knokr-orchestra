@@ -8,23 +8,70 @@ datasource db {
 }
 
 model Artist {
-  id             String            @id @default(cuid())
-  name           String
-  slug           String            @unique
-  location       String
-  country        String
-  genres         String[]
-  bio            String?
-  website        String?
-  spotify        String?
-  imageUrl       String?
-  members        ArtistMember[]    @relation("ArtistMembers")
-  pendingMembers PendingArtistMember[] @relation("PendingArtistMembers")
-  connections    ArtistConnection[] @relation("ArtistConnections")
-  connectedBy    ArtistConnection[] @relation("ConnectedArtists")
+  id                                                     String                 @id @default(cuid())
+  name                                                   String
+  slug                                                   String                 @unique
+  location                                               String
+  country                                                String
+  region                                                 String?
+  city                                                   String
+  genres                                                 String[]
+  bio                                                    String?
+  website                                                String?
+  instagram                                              String?
+  facebook                                               String?
+  youtube                                                String?
+  spotify                                                String?
+  tiktok                                                 String?
+  managerId                                              String
+  createdAt                                              DateTime               @default(now())
+  updatedAt                                              DateTime
+  imageUrl                                               String?
+  organizationId                                         String?
+  bandcamp                                               String?
+  soundcloud                                             String?
+  contactPage                                            String?
+  appleMusic                                             String?
+  tourPage                                               String?
+  gender                                                 String[]
+  merchPage                                              String?
+  festivalCount                                          Int                    @default(0)
+  isEmerging                                             Boolean                @default(false)
+  popularityScore                                        Float?
+  popularityTier                                         PopularityTier?
+  Profile                                                Profile                @relation(fields: [managerId], references: [id], onDelete: Cascade)
+  Organization                                           Organization?          @relation(fields: [organizationId], references: [id])
+  connections                                            ArtistConnection[]     @relation("ArtistConnections")
+  connectedBy                                            ArtistConnection[]     @relation("ConnectedArtists")
+  ArtistFollower                                         ArtistFollower[]
+  ArtistGraphEmbedding                                   ArtistGraphEmbedding?
+  members                                                ArtistMember[]         @relation("ArtistMembers")
+  ArtistMilestone                                        ArtistMilestone[]
+  ArtistNavigationItem                                   ArtistNavigationItem[]
+  ArtistPage                                             ArtistPage[]
+  ArtistSection                                          ArtistSection[]
+  ArtistTemplate                                         ArtistTemplate[]
+  EarlySupport                                           EarlySupport[]
+  EventArtist                                            EventArtist[]
+  FestivalLineup                                         FestivalLineup[]
+  PendingArtist_PendingArtist_promotedToArtistIdToArtist PendingArtist?         @relation("PendingArtist_promotedToArtistIdToArtist")
+  PendingArtist_PendingArtist_sourceBandIdToArtist       PendingArtist[]        @relation("PendingArtist_sourceBandIdToArtist")
+  pendingMembers                                         PendingArtistMember[]  @relation("PendingArtistMembers")
+  Project                                                Project?
+  SceneMember                                            SceneMember[]
 
   @@index([slug])
   @@index([name])
+  @@index([city])
+  @@index([country])
+  @@index([createdAt])
+  @@index([festivalCount])
+  @@index([isEmerging])
+  @@index([managerId])
+  @@index([organizationId])
+  @@index([popularityScore])
+  @@index([popularityTier])
+  @@index([slug], map: "idx_artist_slug")
 }
 
 model ArtistConnection {
@@ -33,14 +80,13 @@ model ArtistConnection {
   connectedArtistId String
   weight            Float    @default(0.0)
   sharedFestivals   Int      @default(0)
+  lastUpdated       DateTime @default(now()) @updatedAt
   sameCity          Boolean  @default(false)
   sameRegion        Boolean  @default(false)
   sharedGenres      Int      @default(0)
   sharedMembers     Int      @default(0)
-  lastUpdated       DateTime @default(now()) @updatedAt
-
-  artist          Artist @relation("ArtistConnections", fields: [artistId], references: [id], onDelete: Cascade)
-  connectedArtist Artist @relation("ConnectedArtists", fields: [connectedArtistId], references: [id], onDelete: Cascade)
+  artist            Artist   @relation("ArtistConnections", fields: [artistId], references: [id], onDelete: Cascade)
+  connectedArtist   Artist   @relation("ConnectedArtists", fields: [connectedArtistId], references: [id], onDelete: Cascade)
 
   @@unique([artistId, connectedArtistId])
   @@index([artistId])
@@ -50,30 +96,22 @@ model ArtistConnection {
 }
 
 model ArtistMember {
-  id           String   @id @default(cuid())
+  id           String                @id @default(cuid())
   artistId     String
   name         String
   role         String
-  isActive     Boolean  @default(true)
+  isActive     Boolean               @default(true)
   startYear    Int?
   endYear      Int?
   imageUrl     String?
   wikipediaUrl String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  artist       Artist   @relation("ArtistMembers", fields: [artistId], references: [id], onDelete: Cascade)
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+  artist       Artist                @relation("ArtistMembers", fields: [artistId], references: [id], onDelete: Cascade)
   promotedFrom PendingArtistMember[] @relation("PromotedMember")
 
   @@index([artistId])
   @@index([name])
-}
-
-enum PendingMemberStatus {
-  PENDING
-  APPROVED
-  REJECTED
-  DUPLICATE
 }
 
 model PendingArtistMember {
@@ -88,19 +126,2521 @@ model PendingArtistMember {
   wikipediaUrl    String?
   submittedAt     DateTime            @default(now())
   submitterIp     String?
-  submitterUserId String?
-  submitterName   String?
   submitterNote   String?
   status          PendingMemberStatus @default(PENDING)
-  reviewedAt    DateTime?
-  reviewedById  String?
-  adminNotes    String?
-  promotedToId  String?
-
-  artist     Artist        @relation("PendingArtistMembers", fields: [artistId], references: [id], onDelete: Cascade)
-  promotedTo ArtistMember? @relation("PromotedMember", fields: [promotedToId], references: [id])
+  reviewedAt      DateTime?
+  reviewedById    String?
+  adminNotes      String?
+  promotedToId    String?
+  submitterName   String?
+  submitterUserId String?
+  artist          Artist              @relation("PendingArtistMembers", fields: [artistId], references: [id], onDelete: Cascade)
+  promotedTo      ArtistMember?       @relation("PromotedMember", fields: [promotedToId], references: [id])
+  Profile         Profile?            @relation(fields: [reviewedById], references: [id])
 
   @@index([artistId])
   @@index([status])
   @@index([submittedAt])
+}
+
+model ArtistFollower {
+  id         String   @id
+  profileId  String
+  artistId   String
+  followedAt DateTime @default(now())
+  Artist     Artist   @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  Profile    Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, artistId])
+  @@index([artistId])
+  @@index([followedAt])
+  @@index([profileId])
+}
+
+model ArtistGraphEmbedding {
+  id        String                @id
+  artistId  String                @unique
+  embedding Unsupported("vector")
+  createdAt DateTime              @default(now())
+  updatedAt DateTime
+  Artist    Artist                @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  @@index([artistId])
+}
+
+model ArtistMilestone {
+  id         String   @id
+  artistId   String
+  milestone  String
+  achievedAt DateTime @default(now())
+  metadata   Json?
+  Artist     Artist   @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  @@index([achievedAt])
+  @@index([artistId])
+  @@index([milestone])
+}
+
+model ArtistNavigationItem {
+  id                         String                 @id
+  artistId                   String
+  sectionId                  String?
+  label                      String
+  url                        String
+  icon                       String?
+  order                      Int                    @default(0)
+  isActive                   Boolean                @default(true)
+  isExternal                 Boolean                @default(false)
+  includeInHeader            Boolean                @default(false)
+  parentId                   String?
+  createdAt                  DateTime               @default(now())
+  updatedAt                  DateTime
+  createdById                String
+  Artist                     Artist                 @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  Profile                    Profile                @relation(fields: [createdById], references: [id])
+  ArtistNavigationItem       ArtistNavigationItem?  @relation("ArtistNavigationItemToArtistNavigationItem", fields: [parentId], references: [id], onDelete: Cascade)
+  other_ArtistNavigationItem ArtistNavigationItem[] @relation("ArtistNavigationItemToArtistNavigationItem")
+  ArtistSection              ArtistSection?         @relation(fields: [sectionId], references: [id])
+  ArtistPage                 ArtistPage?
+
+  @@index([artistId])
+  @@index([createdById])
+  @@index([parentId])
+  @@index([sectionId])
+  @@index([url])
+}
+
+model ArtistPage {
+  id                   String               @id
+  artistId             String
+  navigationItemId     String               @unique
+  templateId           String?
+  sectionId            String?
+  title                String
+  slug                 String
+  description          String?
+  status               PageStatus           @default(DRAFT)
+  metaTitle            String?
+  metaDescription      String?
+  ogImage              String?
+  publishedAt          DateTime?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime
+  createdById          String
+  Artist               Artist               @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  Profile              Profile              @relation(fields: [createdById], references: [id])
+  ArtistNavigationItem ArtistNavigationItem @relation(fields: [navigationItemId], references: [id])
+  ArtistSection        ArtistSection?       @relation(fields: [sectionId], references: [id])
+  ArtistTemplate       ArtistTemplate?      @relation(fields: [templateId], references: [id])
+
+  @@unique([artistId, slug])
+  @@index([artistId])
+  @@index([createdById])
+  @@index([navigationItemId])
+  @@index([sectionId])
+  @@index([status])
+  @@index([templateId])
+}
+
+model ArtistPayout {
+  id               String       @id
+  eventId          String
+  totalSales       Decimal      @db.Decimal(10, 2)
+  platformFee      Decimal      @db.Decimal(10, 2)
+  artistPayout     Decimal      @db.Decimal(10, 2)
+  ticketCount      Int
+  scheduledFor     DateTime
+  status           PayoutStatus @default(PENDING)
+  paidAt           DateTime?
+  stripeTransferId String?      @unique
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime
+  Event            Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+  @@index([status])
+}
+
+model ArtistRequest {
+  id                                          String              @id
+  artistName                                  String
+  country                                     String
+  region                                      String?
+  city                                        String
+  genres                                      String[]
+  website                                     String?
+  instagram                                   String?
+  facebook                                    String?
+  youtube                                     String?
+  spotify                                     String?
+  requesterId                                 String?
+  status                                      ArtistRequestStatus @default(PENDING)
+  adminNotes                                  String?
+  createdAt                                   DateTime            @default(now())
+  updatedAt                                   DateTime
+  reviewedAt                                  DateTime?
+  reviewedById                                String?
+  bio                                         String?
+  tiktok                                      String?
+  Profile_ArtistRequest_requesterIdToProfile  Profile?            @relation("ArtistRequest_requesterIdToProfile", fields: [requesterId], references: [id])
+  Profile_ArtistRequest_reviewedByIdToProfile Profile?            @relation("ArtistRequest_reviewedByIdToProfile", fields: [reviewedById], references: [id])
+
+  @@index([city])
+  @@index([country])
+  @@index([createdAt])
+  @@index([requesterId])
+  @@index([status])
+}
+
+model ArtistSection {
+  id                   String                 @id
+  artistId             String
+  name                 String
+  slug                 String
+  description          String?
+  icon                 String?
+  order                Int                    @default(0)
+  isActive             Boolean                @default(true)
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime
+  createdById          String
+  ArtistNavigationItem ArtistNavigationItem[]
+  ArtistPage           ArtistPage[]
+  Artist               Artist                 @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  Profile              Profile                @relation(fields: [createdById], references: [id])
+
+  @@unique([artistId, slug])
+  @@index([artistId])
+  @@index([createdById])
+}
+
+model ArtistTemplate {
+  id          String       @id
+  artistId    String
+  name        String
+  description String?
+  config      Json
+  headerId    String?
+  footerId    String?
+  isActive    Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime
+  createdById String
+  ArtistPage  ArtistPage[]
+  Artist      Artist       @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  Profile     Profile      @relation(fields: [createdById], references: [id])
+  SiteFooter  SiteFooter?  @relation(fields: [footerId], references: [id])
+  SiteHeader  SiteHeader?  @relation(fields: [headerId], references: [id])
+
+  @@unique([artistId, name])
+  @@index([artistId])
+  @@index([createdById])
+  @@index([footerId])
+  @@index([headerId])
+}
+
+model BlockedDomain {
+  id        String   @id
+  domain    String   @unique
+  reason    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
+
+model City {
+  id                   String                 @id
+  name                 String                 @unique
+  slug                 String                 @unique
+  country              String
+  region               String?
+  latitude             Float?
+  longitude            Float?
+  population           Int?
+  metroAreaId          String?
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime
+  MetroArea            MetroArea?             @relation(fields: [metroAreaId], references: [id])
+  LocationSubscription LocationSubscription[]
+  Profile              Profile[]
+  searchable_items     searchable_items[]
+
+  @@index([country])
+  @@index([metroAreaId])
+  @@index([name])
+  @@index([slug])
+}
+
+model CommemorativeTicket {
+  id              String        @id
+  eventId         String
+  profileId       String
+  amount          Decimal       @db.Decimal(10, 2)
+  currency        String        @default("USD")
+  purchasedAt     DateTime      @default(now())
+  paymentId       String?       @unique
+  paymentStatus   PaymentStatus @default(PENDING)
+  designId        String
+  fanName         String?
+  fanMessage      String?
+  supporterNumber Int
+  ipfsHash        String?
+  ipfsImageHash   String?
+  ipfsGatewayUrl  String?
+  ipfsImageUrl    String?
+  localImageUrl   String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime
+  TicketDesign    TicketDesign  @relation(fields: [designId], references: [id])
+  Event           Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  Profile         Profile       @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  EarlySupport    EarlySupport?
+
+  @@index([eventId])
+  @@index([paymentStatus])
+  @@index([profileId])
+}
+
+model Component {
+  id          String   @id
+  name        String
+  slug        String   @unique
+  description String?
+  category    String
+  schema      Json
+  preview     String?
+  code        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+
+  @@index([category])
+  @@index([slug])
+}
+
+model ContactSubmission {
+  id        String           @id
+  type      SubmissionType   @default(FEEDBACK)
+  severity  Severity?
+  name      String
+  email     String
+  subject   String?
+  message   String
+  page      String?
+  userAgent String?
+  userId    String?
+  status    SubmissionStatus @default(NEW)
+  createdAt DateTime         @default(now())
+  readAt    DateTime?
+  Profile   Profile?         @relation(fields: [userId], references: [id])
+
+  @@index([createdAt])
+  @@index([severity])
+  @@index([status])
+  @@index([type])
+  @@index([userId])
+}
+
+model EarlySupport {
+  id                  String              @id
+  ticketId            String              @unique
+  profileId           String
+  artistId            String
+  supportedAt         DateTime
+  artistFollowers     Int
+  supporterNumber     Int
+  Artist              Artist              @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  Profile             Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  CommemorativeTicket CommemorativeTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([artistFollowers])
+  @@index([artistId])
+  @@index([profileId])
+  @@index([supportedAt])
+}
+
+model Event {
+  id                                 String                   @id
+  type                               EventType
+  status                             EventStatus              @default(DRAFT)
+  title                              String
+  slug                               String
+  dateSlug                           String
+  locationSlug                       String?
+  eventDate                          DateTime
+  startTime                          DateTime?
+  endTime                            DateTime?
+  venueId                            String?
+  festivalId                         String?
+  locationName                       String?
+  locationCity                       String?
+  locationCountry                    String?
+  locationRegion                     String?
+  description                        String?
+  imageUrl                           String?
+  ticketUrl                          String?
+  eventUrl                           String?
+  freeShow                           Boolean                  @default(false)
+  isPrivate                          Boolean                  @default(false)
+  parentEventId                      String?
+  hostId                             String?
+  ownerId                            String?
+  createdAt                          DateTime                 @default(now())
+  updatedAt                          DateTime
+  publishedAt                        DateTime?
+  searchVector                       Unsupported("tsvector")?
+  createdById                        String
+  projectId                          String?
+  latitude                           Decimal?                 @db.Decimal(10, 8)
+  longitude                          Decimal?                 @db.Decimal(11, 8)
+  aslInterpreted                     Boolean                  @default(false)
+  price                              Decimal?                 @db.Decimal(10, 2)
+  priceMax                           Decimal?                 @db.Decimal(10, 2)
+  priceMin                           Decimal?                 @db.Decimal(10, 2)
+  wheelchairAccessible               Boolean                  @default(false)
+  isOnline                           Boolean                  @default(false)
+  virtualEventUrl                    String?
+  allowPiggybacks                    Boolean                  @default(true)
+  festivalName                       String?
+  stageId                            String?
+  stageName                          String?
+  venueName                          String?
+  ArtistPayout                       ArtistPayout[]
+  CommemorativeTicket                CommemorativeTicket[]
+  Profile_Event_createdByIdToProfile Profile                  @relation("Event_createdByIdToProfile", fields: [createdById], references: [id])
+  Festival                           Festival?                @relation(fields: [festivalId], references: [id], onDelete: Cascade)
+  Profile_Event_hostIdToProfile      Profile?                 @relation("Event_hostIdToProfile", fields: [hostId], references: [id], onDelete: Cascade)
+  Profile_Event_ownerIdToProfile     Profile?                 @relation("Event_ownerIdToProfile", fields: [ownerId], references: [id], onDelete: Cascade)
+  Event                              Event?                   @relation("EventToEvent", fields: [parentEventId], references: [id], onDelete: Cascade)
+  other_Event                        Event[]                  @relation("EventToEvent")
+  Project                            Project?                 @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  Stage                              Stage?                   @relation(fields: [stageId], references: [id])
+  Venue                              Venue?                   @relation(fields: [venueId], references: [id])
+  EventArtist                        EventArtist[]
+  EventAttendee                      EventAttendee[]
+  EventPendingArtist                 EventPendingArtist[]
+  EventPendingVenue                  EventPendingVenue[]
+  EventSponsor                       EventSponsor[]
+  TicketDesign                       TicketDesign[]
+  trip_events                        trip_events[]
+
+  @@unique([slug, dateSlug, locationSlug])
+  @@index([allowPiggybacks])
+  @@index([createdAt])
+  @@index([createdById])
+  @@index([eventDate])
+  @@index([eventDate, venueId])
+  @@index([festivalId])
+  @@index([hostId])
+  @@index([isOnline])
+  @@index([ownerId])
+  @@index([parentEventId])
+  @@index([projectId])
+  @@index([slug, dateSlug, venueId])
+  @@index([stageId])
+  @@index([status])
+  @@index([type])
+  @@index([venueId])
+  @@index([searchVector], map: "event_search_idx", type: Gin)
+  @@index([eventDate], map: "idx_event_date")
+  @@index([status], map: "idx_event_status")
+  @@index([venueId], map: "idx_event_venue")
+}
+
+model EventArtist {
+  id        String   @id
+  eventId   String
+  artistId  String
+  isPrimary Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  Artist    Artist   @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  Event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, artistId])
+  @@index([artistId])
+  @@index([eventId, artistId])
+  @@index([eventId])
+  @@index([eventId, order])
+  @@index([artistId], map: "idx_event_artist_artist")
+}
+
+model EventAttendee {
+  id        String   @id
+  eventId   String
+  profileId String
+  rsvpedAt  DateTime @default(now())
+  attended  Boolean?
+  Event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  Profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, profileId])
+  @@index([eventId])
+  @@index([profileId])
+}
+
+model EventPendingArtist {
+  id              String        @id
+  eventId         String
+  pendingArtistId String
+  isPrimary       Boolean       @default(false)
+  order           Int           @default(0)
+  createdAt       DateTime      @default(now())
+  Event           Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  PendingArtist   PendingArtist @relation(fields: [pendingArtistId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, pendingArtistId])
+  @@index([eventId])
+  @@index([pendingArtistId])
+}
+
+model EventPendingVenue {
+  id             String       @id
+  eventId        String
+  pendingVenueId String
+  createdAt      DateTime     @default(now())
+  Event          Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  PendingVenue   PendingVenue @relation(fields: [pendingVenueId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, pendingVenueId])
+  @@index([eventId])
+  @@index([pendingVenueId])
+}
+
+model EventSponsor {
+  id        String   @id
+  eventId   String
+  sponsorId String
+  isPrimary Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  Event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  Sponsor   Sponsor  @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, sponsorId])
+  @@index([eventId])
+  @@index([sponsorId])
+}
+
+model FanConnection {
+  id                                        String   @id
+  profile1Id                                String
+  profile2Id                                String
+  connectionType                            String
+  sharedArtists                             String[]
+  strength                                  Int
+  discoveredAt                              DateTime @default(now())
+  lastUpdated                               DateTime
+  Profile_FanConnection_profile1IdToProfile Profile  @relation("FanConnection_profile1IdToProfile", fields: [profile1Id], references: [id], onDelete: Cascade)
+  Profile_FanConnection_profile2IdToProfile Profile  @relation("FanConnection_profile2IdToProfile", fields: [profile2Id], references: [id], onDelete: Cascade)
+
+  @@unique([profile1Id, profile2Id])
+  @@index([connectionType])
+  @@index([profile1Id])
+  @@index([profile2Id])
+  @@index([strength])
+}
+
+model Festival {
+  id               String             @id
+  name             String
+  slug             String             @unique
+  location         String
+  country          String
+  region           String?
+  city             String
+  startDate        DateTime
+  endDate          DateTime
+  genres           String[]
+  bio              String?
+  website          String?
+  ticketsUrl       String?
+  instagram        String?
+  facebook         String?
+  youtube          String?
+  spotify          String?
+  tiktok           String?
+  managerId        String
+  isActive         Boolean            @default(true)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime
+  metroArea        String?
+  imageUrl         String?
+  organizationId   String?
+  isCruise         Boolean            @default(false)
+  Event            Event[]
+  Profile          Profile            @relation(fields: [managerId], references: [id], onDelete: Cascade)
+  Organization     Organization?      @relation(fields: [organizationId], references: [id])
+  FestivalFollower FestivalFollower[]
+  FestivalLineup   FestivalLineup[]
+  FestivalScene    FestivalScene[]
+  Project          Project?
+  Stage            Stage[]
+
+  @@index([city])
+  @@index([country])
+  @@index([endDate])
+  @@index([managerId])
+  @@index([metroArea])
+  @@index([organizationId])
+  @@index([slug])
+  @@index([startDate])
+}
+
+model FestivalFollower {
+  id         String   @id
+  profileId  String
+  festivalId String
+  followedAt DateTime @default(now())
+  Festival   Festival @relation(fields: [festivalId], references: [id], onDelete: Cascade)
+  Profile    Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, festivalId])
+  @@index([festivalId])
+  @@index([followedAt])
+  @@index([profileId])
+}
+
+model FestivalLineup {
+  id         String   @id
+  festivalId String
+  artistId   String
+  createdAt  DateTime @default(now())
+  Artist     Artist   @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  Festival   Festival @relation(fields: [festivalId], references: [id], onDelete: Cascade)
+
+  @@unique([festivalId, artistId])
+  @@index([artistId])
+  @@index([festivalId])
+}
+
+model FestivalRequest {
+  id                                            String                @id
+  festivalName                                  String
+  country                                       String
+  region                                        String?
+  city                                          String
+  startDate                                     DateTime
+  endDate                                       DateTime
+  genres                                        String[]
+  description                                   String?
+  website                                       String?
+  ticketsUrl                                    String?
+  instagram                                     String?
+  facebook                                      String?
+  youtube                                       String?
+  spotify                                       String?
+  tiktok                                        String?
+  requesterId                                   String?
+  status                                        FestivalRequestStatus @default(PENDING)
+  adminNotes                                    String?
+  createdAt                                     DateTime              @default(now())
+  updatedAt                                     DateTime
+  reviewedAt                                    DateTime?
+  reviewedById                                  String?
+  metroArea                                     String?
+  justification                                 String?
+  organizationId                                String?
+  slug                                          String?
+  Organization                                  Organization?         @relation(fields: [organizationId], references: [id])
+  Profile_FestivalRequest_requesterIdToProfile  Profile?              @relation("FestivalRequest_requesterIdToProfile", fields: [requesterId], references: [id])
+  Profile_FestivalRequest_reviewedByIdToProfile Profile?              @relation("FestivalRequest_reviewedByIdToProfile", fields: [reviewedById], references: [id])
+
+  @@index([city])
+  @@index([country])
+  @@index([createdAt])
+  @@index([metroArea])
+  @@index([organizationId])
+  @@index([requesterId])
+  @@index([startDate])
+  @@index([status])
+}
+
+model FestivalScene {
+  id         String   @id
+  festivalId String
+  sceneId    String
+  strength   Float    @default(1.0)
+  Festival   Festival @relation(fields: [festivalId], references: [id], onDelete: Cascade)
+  Scene      Scene    @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+
+  @@unique([festivalId, sceneId])
+  @@index([festivalId])
+  @@index([sceneId])
+}
+
+model LocationSubscription {
+  id           String   @id
+  profileId    String
+  cityId       String
+  subscribedAt DateTime @default(now())
+  City         City     @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  Profile      Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, cityId])
+  @@index([cityId])
+  @@index([profileId])
+  @@index([subscribedAt])
+}
+
+model MediaFile {
+  id           String       @id
+  filename     String
+  storedName   String
+  url          String
+  storageType  StorageType  @default(S3)
+  bucket       String?
+  path         String
+  mimeType     String
+  size         Int
+  width        Int?
+  height       Int?
+  alt          String?
+  caption      String?
+  uploadedById String
+  folderId     String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime
+  projectId    String?
+  MediaFolder  MediaFolder? @relation(fields: [folderId], references: [id])
+  Project      Project?     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  Profile      Profile      @relation(fields: [uploadedById], references: [id])
+  SiteHeader   SiteHeader[]
+  MediaTag     MediaTag[]
+
+  @@index([createdAt])
+  @@index([folderId])
+  @@index([mimeType])
+  @@index([projectId])
+  @@index([storageType])
+  @@index([uploadedById])
+}
+
+model MediaFolder {
+  id                String        @id
+  name              String
+  parentId          String?
+  createdAt         DateTime      @default(now())
+  projectId         String?
+  MediaFile         MediaFile[]
+  MediaFolder       MediaFolder?  @relation("MediaFolderToMediaFolder", fields: [parentId], references: [id], onDelete: Cascade)
+  other_MediaFolder MediaFolder[] @relation("MediaFolderToMediaFolder")
+  Project           Project?      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([parentId])
+  @@index([projectId])
+}
+
+model MediaTag {
+  id        String      @id
+  name      String      @unique
+  MediaFile MediaFile[]
+}
+
+model MetroArea {
+  id            String   @id
+  name          String   @unique
+  slug          String   @unique
+  primaryCityId String?
+  country       String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime
+  City          City[]
+
+  @@index([country])
+  @@index([slug])
+}
+
+model NavigationItem {
+  id                   String           @id
+  label                String
+  url                  String
+  order                Int
+  sectionId            String?
+  parentId             String?
+  isExternal           Boolean          @default(false)
+  includeInHeader      Boolean          @default(false)
+  requiredRole         Role?
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime
+  createdById          String?
+  Profile              Profile?         @relation(fields: [createdById], references: [id])
+  NavigationItem       NavigationItem?  @relation("NavigationItemToNavigationItem", fields: [parentId], references: [id], onDelete: Cascade)
+  other_NavigationItem NavigationItem[] @relation("NavigationItemToNavigationItem")
+  Section              Section?         @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  Page                 Page?
+
+  @@index([createdById])
+  @@index([includeInHeader])
+  @@index([order])
+  @@index([parentId])
+  @@index([sectionId])
+}
+
+model Notification {
+  id         String           @id
+  type       NotificationType
+  title      String
+  content    String?
+  link       String?
+  read       Boolean          @default(false)
+  userId     String
+  createdAt  DateTime         @default(now())
+  actorId    String?
+  entityType String?
+  entityId   String?
+  Profile    Profile          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+  @@index([type])
+  @@index([userId, read])
+}
+
+model Organization {
+  id                     String                   @id
+  name                   String
+  slug                   String                   @unique
+  ownerId                String?
+  maxMembers             Int                      @default(10)
+  isActive               Boolean                  @default(true)
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime
+  Artist                 Artist[]
+  Festival               Festival[]
+  FestivalRequest        FestivalRequest[]
+  Profile                Profile?                 @relation(fields: [ownerId], references: [id])
+  OrganizationAuditLog   OrganizationAuditLog[]
+  OrganizationInvitation OrganizationInvitation[]
+  OrganizationMember     OrganizationMember[]
+  Project                Project[]
+  Sponsor                Sponsor[]
+  Venue                  Venue[]
+
+  @@index([ownerId])
+  @@index([slug])
+}
+
+model OrganizationAuditLog {
+  id             String       @id
+  organizationId String
+  userId         String
+  action         String
+  entityType     String?
+  entityId       String?
+  metadata       Json?
+  createdAt      DateTime     @default(now())
+  Organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  Profile        Profile      @relation(fields: [userId], references: [id])
+
+  @@index([createdAt])
+  @@index([organizationId])
+  @@index([userId])
+}
+
+model OrganizationInvitation {
+  id                                                       String           @id
+  organizationId                                           String
+  invitedById                                              String
+  invitedEmail                                             String
+  invitedProfileId                                         String?
+  token                                                    String           @unique
+  role                                                     OrganizationRole @default(COLLABORATOR)
+  status                                                   InvitationStatus @default(PENDING)
+  expiresAt                                                DateTime
+  acceptedAt                                               DateTime?
+  createdAt                                                DateTime         @default(now())
+  Profile_OrganizationInvitation_invitedByIdToProfile      Profile          @relation("OrganizationInvitation_invitedByIdToProfile", fields: [invitedById], references: [id])
+  Profile_OrganizationInvitation_invitedProfileIdToProfile Profile?         @relation("OrganizationInvitation_invitedProfileIdToProfile", fields: [invitedProfileId], references: [id])
+  Organization                                             Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([invitedProfileId])
+  @@index([organizationId])
+  @@index([status])
+  @@index([token])
+}
+
+model OrganizationMember {
+  id                                              String           @id
+  organizationId                                  String
+  profileId                                       String
+  role                                            OrganizationRole @default(COLLABORATOR)
+  invitedById                                     String
+  joinedAt                                        DateTime         @default(now())
+  Profile_OrganizationMember_invitedByIdToProfile Profile          @relation("OrganizationMember_invitedByIdToProfile", fields: [invitedById], references: [id])
+  Organization                                    Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  Profile_OrganizationMember_profileIdToProfile   Profile          @relation("OrganizationMember_profileIdToProfile", fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, profileId])
+  @@index([organizationId])
+  @@index([profileId])
+}
+
+model Page {
+  id                                String                   @id
+  title                             String
+  description                       String?
+  content                           Json?
+  templateId                        String?
+  navigationItemId                  String?                  @unique
+  sectionId                         String?
+  status                            PageStatus               @default(DRAFT)
+  isHomepage                        Boolean                  @default(false)
+  accessLevel                       PageAccessLevel          @default(PUBLIC)
+  allowedRoles                      Json?
+  metaTitle                         String?
+  metaDescription                   String?
+  ogImage                           String?
+  searchVector                      Unsupported("tsvector")?
+  publishedAt                       DateTime?
+  createdAt                         DateTime                 @default(now())
+  updatedAt                         DateTime
+  createdById                       String
+  updatedById                       String?
+  Profile_Page_createdByIdToProfile Profile                  @relation("Page_createdByIdToProfile", fields: [createdById], references: [id])
+  NavigationItem                    NavigationItem?          @relation(fields: [navigationItemId], references: [id])
+  Section                           Section?                 @relation(fields: [sectionId], references: [id])
+  PageTemplate                      PageTemplate?            @relation(fields: [templateId], references: [id])
+  Profile_Page_updatedByIdToProfile Profile?                 @relation("Page_updatedByIdToProfile", fields: [updatedById], references: [id])
+  PageSection                       PageSection[]
+
+  @@index([accessLevel])
+  @@index([createdById])
+  @@index([isHomepage])
+  @@index([navigationItemId])
+  @@index([sectionId])
+  @@index([status])
+  @@index([templateId])
+}
+
+model PageSection {
+  id          String   @id
+  pageId      String
+  componentId String
+  order       Int
+  props       Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+  Page        Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@index([order])
+  @@index([pageId])
+}
+
+model PageTemplate {
+  id          String      @id
+  name        String
+  slug        String      @unique
+  description String?
+  thumbnail   String?
+  config      Json
+  headerId    String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime
+  createdById String?
+  Page        Page[]
+  Profile     Profile?    @relation(fields: [createdById], references: [id])
+  SiteHeader  SiteHeader? @relation(fields: [headerId], references: [id])
+
+  @@index([createdById])
+  @@index([headerId])
+  @@index([slug])
+}
+
+model PendingArtist {
+  id                                              String               @id
+  name                                            String
+  genres                                          String[]
+  website                                         String?
+  instagram                                       String?
+  facebook                                        String?
+  spotify                                         String?
+  tiktok                                          String?
+  youtube                                         String?
+  addedById                                       String
+  promotedToArtistId                              String?              @unique
+  promotedAt                                      DateTime?
+  promotedById                                    String?
+  createdAt                                       DateTime             @default(now())
+  updatedAt                                       DateTime
+  sourceBandId                                    String?
+  sourceMemberRole                                String?
+  EventPendingArtist                              EventPendingArtist[]
+  Profile_PendingArtist_addedByIdToProfile        Profile              @relation("PendingArtist_addedByIdToProfile", fields: [addedById], references: [id], onDelete: Cascade)
+  Profile_PendingArtist_promotedByIdToProfile     Profile?             @relation("PendingArtist_promotedByIdToProfile", fields: [promotedById], references: [id])
+  Artist_PendingArtist_promotedToArtistIdToArtist Artist?              @relation("PendingArtist_promotedToArtistIdToArtist", fields: [promotedToArtistId], references: [id])
+  Artist_PendingArtist_sourceBandIdToArtist       Artist?              @relation("PendingArtist_sourceBandIdToArtist", fields: [sourceBandId], references: [id])
+
+  @@index([addedById])
+  @@index([name])
+  @@index([promotedAt])
+  @@index([promotedToArtistId])
+  @@index([sourceBandId])
+}
+
+model PendingFestival {
+  id                   String        @id
+  name                 String
+  normalizedName       String
+  city                 String?
+  state                String?
+  country              String?
+  startDate            DateTime?
+  endDate              DateTime?
+  website              String?
+  sourcePendingVenueId String?
+  addedById            String
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime
+  notes                String?
+  Profile              Profile       @relation(fields: [addedById], references: [id])
+  PendingVenue         PendingVenue? @relation(fields: [sourcePendingVenueId], references: [id])
+
+  @@index([addedById])
+  @@index([normalizedName])
+}
+
+model PendingVenue {
+  id                                         String              @id
+  name                                       String
+  normalizedName                             String
+  city                                       String?
+  state                                      String?
+  country                                    String?
+  address                                    String?
+  suggestedVenueId                           String?
+  matchConfidence                            Float?
+  matchReason                                String?
+  status                                     PendingVenueStatus  @default(PENDING)
+  resolvedVenueId                            String?
+  resolvedAt                                 DateTime?
+  resolvedById                               String?
+  addedById                                  String
+  uploadBatchId                              String?
+  createdAt                                  DateTime            @default(now())
+  updatedAt                                  DateTime
+  EventPendingVenue                          EventPendingVenue[]
+  PendingFestival                            PendingFestival[]
+  Profile_PendingVenue_addedByIdToProfile    Profile             @relation("PendingVenue_addedByIdToProfile", fields: [addedById], references: [id])
+  Profile_PendingVenue_resolvedByIdToProfile Profile?            @relation("PendingVenue_resolvedByIdToProfile", fields: [resolvedById], references: [id])
+  Venue_PendingVenue_resolvedVenueIdToVenue  Venue?              @relation("PendingVenue_resolvedVenueIdToVenue", fields: [resolvedVenueId], references: [id])
+  Venue_PendingVenue_suggestedVenueIdToVenue Venue?              @relation("PendingVenue_suggestedVenueIdToVenue", fields: [suggestedVenueId], references: [id])
+
+  @@index([addedById])
+  @@index([city, normalizedName])
+  @@index([name])
+  @@index([normalizedName])
+  @@index([status])
+}
+
+model PrivacySettings {
+  id                 String            @id
+  profileId          String            @unique
+  profileVisibility  ProfileVisibility @default(PUBLIC)
+  followRequirement  FollowRequirement @default(ANYONE)
+  showFollowerCount  Boolean           @default(true)
+  showFollowingCount Boolean           @default(true)
+  showActivity       Boolean           @default(true)
+  allowMessages      Boolean           @default(true)
+  showEmail          Boolean           @default(false)
+  showLocation       Boolean           @default(true)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime
+  Profile            Profile           @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+}
+
+model Profile {
+  id                                                                      String                   @id
+  clerkId                                                                 String                   @unique
+  role                                                                    Role                     @default(MEMBER)
+  email                                                                   String?                  @unique
+  phoneNumber                                                             String?                  @unique
+  name                                                                    String?
+  firstName                                                               String?
+  lastName                                                                String?
+  imageUrl                                                                String?
+  bio                                                                     String?
+  location                                                                String?
+  website                                                                 String?
+  social                                                                  Json?
+  isActive                                                                Boolean                  @default(true)
+  isBanned                                                                Boolean                  @default(false)
+  banReason                                                               String?
+  lastLoginAt                                                             DateTime?
+  createdAt                                                               DateTime                 @default(now())
+  updatedAt                                                               DateTime
+  username                                                                String?                  @unique
+  stripeCustomerId                                                        String?                  @unique
+  homeCityId                                                              String?
+  preferredRadius                                                         Int                      @default(50)
+  badges                                                                  Json?
+  coverImageUrl                                                           String?
+  displayName                                                             String?
+  favoriteGenres                                                          String[]
+  isVerified                                                              Boolean                  @default(false)
+  pronouns                                                                String?
+  tagline                                                                 String?
+  verifiedAt                                                              DateTime?
+  Artist                                                                  Artist[]
+  ArtistFollower                                                          ArtistFollower[]
+  ArtistNavigationItem                                                    ArtistNavigationItem[]
+  ArtistPage                                                              ArtistPage[]
+  ArtistRequest_ArtistRequest_requesterIdToProfile                        ArtistRequest[]          @relation("ArtistRequest_requesterIdToProfile")
+  ArtistRequest_ArtistRequest_reviewedByIdToProfile                       ArtistRequest[]          @relation("ArtistRequest_reviewedByIdToProfile")
+  ArtistSection                                                           ArtistSection[]
+  ArtistTemplate                                                          ArtistTemplate[]
+  CommemorativeTicket                                                     CommemorativeTicket[]
+  ContactSubmission                                                       ContactSubmission[]
+  EarlySupport                                                            EarlySupport[]
+  Event_Event_createdByIdToProfile                                        Event[]                  @relation("Event_createdByIdToProfile")
+  Event_Event_hostIdToProfile                                             Event[]                  @relation("Event_hostIdToProfile")
+  Event_Event_ownerIdToProfile                                            Event[]                  @relation("Event_ownerIdToProfile")
+  EventAttendee                                                           EventAttendee[]
+  FanConnection_FanConnection_profile1IdToProfile                         FanConnection[]          @relation("FanConnection_profile1IdToProfile")
+  FanConnection_FanConnection_profile2IdToProfile                         FanConnection[]          @relation("FanConnection_profile2IdToProfile")
+  Festival                                                                Festival[]
+  FestivalFollower                                                        FestivalFollower[]
+  FestivalRequest_FestivalRequest_requesterIdToProfile                    FestivalRequest[]        @relation("FestivalRequest_requesterIdToProfile")
+  FestivalRequest_FestivalRequest_reviewedByIdToProfile                   FestivalRequest[]        @relation("FestivalRequest_reviewedByIdToProfile")
+  LocationSubscription                                                    LocationSubscription[]
+  MediaFile                                                               MediaFile[]
+  NavigationItem                                                          NavigationItem[]
+  Notification                                                            Notification[]
+  Organization                                                            Organization[]
+  OrganizationAuditLog                                                    OrganizationAuditLog[]
+  OrganizationInvitation_OrganizationInvitation_invitedByIdToProfile      OrganizationInvitation[] @relation("OrganizationInvitation_invitedByIdToProfile")
+  OrganizationInvitation_OrganizationInvitation_invitedProfileIdToProfile OrganizationInvitation[] @relation("OrganizationInvitation_invitedProfileIdToProfile")
+  OrganizationMember_OrganizationMember_invitedByIdToProfile              OrganizationMember[]     @relation("OrganizationMember_invitedByIdToProfile")
+  OrganizationMember_OrganizationMember_profileIdToProfile                OrganizationMember[]     @relation("OrganizationMember_profileIdToProfile")
+  Page_Page_createdByIdToProfile                                          Page[]                   @relation("Page_createdByIdToProfile")
+  Page_Page_updatedByIdToProfile                                          Page[]                   @relation("Page_updatedByIdToProfile")
+  PageTemplate                                                            PageTemplate[]
+  PendingArtist_PendingArtist_addedByIdToProfile                          PendingArtist[]          @relation("PendingArtist_addedByIdToProfile")
+  PendingArtist_PendingArtist_promotedByIdToProfile                       PendingArtist[]          @relation("PendingArtist_promotedByIdToProfile")
+  PendingArtistMember                                                     PendingArtistMember[]
+  PendingFestival                                                         PendingFestival[]
+  PendingVenue_PendingVenue_addedByIdToProfile                            PendingVenue[]           @relation("PendingVenue_addedByIdToProfile")
+  PendingVenue_PendingVenue_resolvedByIdToProfile                         PendingVenue[]           @relation("PendingVenue_resolvedByIdToProfile")
+  PrivacySettings                                                         PrivacySettings?
+  City                                                                    City?                    @relation(fields: [homeCityId], references: [id])
+  Project                                                                 Project[]
+  ProjectMember_ProjectMember_invitedByToProfile                          ProjectMember[]          @relation("ProjectMember_invitedByToProfile")
+  ProjectMember_ProjectMember_profileIdToProfile                          ProjectMember[]          @relation("ProjectMember_profileIdToProfile")
+  ProjectNavigationItem                                                   ProjectNavigationItem[]
+  ProjectPage                                                             ProjectPage[]
+  ProjectSection                                                          ProjectSection[]
+  ProjectTemplate                                                         ProjectTemplate[]
+  Section_Section_createdByIdToProfile                                    Section[]                @relation("Section_createdByIdToProfile")
+  Section_Section_updatedByIdToProfile                                    Section[]                @relation("Section_updatedByIdToProfile")
+  SiteFooter_SiteFooter_createdByIdToProfile                              SiteFooter[]             @relation("SiteFooter_createdByIdToProfile")
+  SiteFooter_SiteFooter_updatedByIdToProfile                              SiteFooter[]             @relation("SiteFooter_updatedByIdToProfile")
+  SiteHeader_SiteHeader_createdByIdToProfile                              SiteHeader[]             @relation("SiteHeader_createdByIdToProfile")
+  SiteHeader_SiteHeader_updatedByIdToProfile                              SiteHeader[]             @relation("SiteHeader_updatedByIdToProfile")
+  SiteHeader_SiteHeader_userIdToProfile                                   SiteHeader[]             @relation("SiteHeader_userIdToProfile")
+  SiteSetting                                                             SiteSetting[]
+  Sponsor                                                                 Sponsor[]
+  SponsorFollower                                                         SponsorFollower[]
+  SponsorRequest_SponsorRequest_requesterIdToProfile                      SponsorRequest[]         @relation("SponsorRequest_requesterIdToProfile")
+  SponsorRequest_SponsorRequest_reviewedByIdToProfile                     SponsorRequest[]         @relation("SponsorRequest_reviewedByIdToProfile")
+  TastemakerRecord                                                        TastemakerRecord?
+  ThemeGroup_ThemeGroup_createdByIdToProfile                              ThemeGroup[]             @relation("ThemeGroup_createdByIdToProfile")
+  ThemeGroup_ThemeGroup_updatedByIdToProfile                              ThemeGroup[]             @relation("ThemeGroup_updatedByIdToProfile")
+  UserActivity                                                            UserActivity[]
+  UserBlock_UserBlock_blockedIdToProfile                                  UserBlock[]              @relation("UserBlock_blockedIdToProfile")
+  UserBlock_UserBlock_blockerIdToProfile                                  UserBlock[]              @relation("UserBlock_blockerIdToProfile")
+  UserFollow_UserFollow_followerIdToProfile                               UserFollow[]             @relation("UserFollow_followerIdToProfile")
+  UserFollow_UserFollow_followingIdToProfile                              UserFollow[]             @relation("UserFollow_followingIdToProfile")
+  UserPreferences                                                         UserPreferences?
+  Venue                                                                   Venue[]
+  VenueFollower                                                           VenueFollower[]
+  VenueNavigationItem                                                     VenueNavigationItem[]
+  VenuePage                                                               VenuePage[]
+  VenueRequest_VenueRequest_requesterIdToProfile                          VenueRequest[]           @relation("VenueRequest_requesterIdToProfile")
+  VenueRequest_VenueRequest_reviewedByIdToProfile                         VenueRequest[]           @relation("VenueRequest_reviewedByIdToProfile")
+  VenueSection                                                            VenueSection[]
+  VenueTemplate                                                           VenueTemplate[]
+  VenueTransferCooldown                                                   VenueTransferCooldown[]
+  VenueTransferRequest_VenueTransferRequest_currentOwnerIdToProfile       VenueTransferRequest[]   @relation("VenueTransferRequest_currentOwnerIdToProfile")
+  VenueTransferRequest_VenueTransferRequest_requestedOwnerIdToProfile     VenueTransferRequest[]   @relation("VenueTransferRequest_requestedOwnerIdToProfile")
+  VenueTransferRequest_VenueTransferRequest_reviewedByIdToProfile         VenueTransferRequest[]   @relation("VenueTransferRequest_reviewedByIdToProfile")
+  blog_posts                                                              blog_posts[]
+  club_post_reactions                                                     club_post_reactions[]
+  club_post_replies                                                       club_post_replies[]
+  club_posts                                                              club_posts[]
+  club_reply_reactions                                                    club_reply_reactions[]
+  content_reports_content_reports_reportedIdToProfile                     content_reports[]        @relation("content_reports_reportedIdToProfile")
+  content_reports_content_reports_reporterIdToProfile                     content_reports[]        @relation("content_reports_reporterIdToProfile")
+  content_reports_content_reports_reviewedByToProfile                     content_reports[]        @relation("content_reports_reviewedByToProfile")
+  post_comments                                                           post_comments[]
+  recommendation_cache                                                    recommendation_cache[]
+  subdomain_blacklist                                                     subdomain_blacklist[]
+
+  @@index([clerkId])
+  @@index([displayName])
+  @@index([email])
+  @@index([isVerified])
+  @@index([phoneNumber])
+  @@index([role])
+  @@index([username])
+}
+
+model Project {
+  id                           String                   @id
+  type                         ProjectType
+  name                         String
+  slug                         String
+  locationSlug                 String                   @default("")
+  location                     String?
+  description                  String?
+  managerId                    String
+  isActive                     Boolean                  @default(true)
+  createdAt                    DateTime                 @default(now())
+  updatedAt                    DateTime
+  country                      String?
+  region                       String?
+  city                         String?
+  address                      String?
+  postalCode                   String?
+  latitude                     Decimal?                 @db.Decimal(10, 8)
+  longitude                    Decimal?                 @db.Decimal(11, 8)
+  artistId                     String?                  @unique
+  festivalId                   String?                  @unique
+  sponsorId                    String?                  @unique
+  searchVector                 Unsupported("tsvector")?
+  customSubdomain              String?                  @unique
+  stripeCustomerId             String?
+  stripeSubscriptionId         String?                  @unique
+  subdomainActivatedAt         DateTime?
+  subdomainActive              Boolean                  @default(false)
+  subdomainRequestedAt         DateTime?
+  subscriptionEndDate          DateTime?
+  subscriptionPlan             SubscriptionPlan         @default(FREE)
+  subscriptionStartDate        DateTime?
+  subscriptionStatus           SubscriptionStatus       @default(NONE)
+  subscriptionCurrentPeriodEnd DateTime?
+  organizationId               String?
+  venueId                      String?                  @unique
+  endDate                      DateTime?
+  startDate                    DateTime?
+  citiesData                   Json?
+  visibility                   ProjectVisibility        @default(PRIVATE)
+  Event                        Event[]
+  MediaFile                    MediaFile[]
+  MediaFolder                  MediaFolder[]
+  Artist                       Artist?                  @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  Festival                     Festival?                @relation(fields: [festivalId], references: [id], onDelete: Cascade)
+  Profile                      Profile                  @relation(fields: [managerId], references: [id], onDelete: Cascade)
+  Organization                 Organization?            @relation(fields: [organizationId], references: [id])
+  Sponsor                      Sponsor?                 @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+  Venue                        Venue?                   @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  ProjectMember                ProjectMember[]
+  ProjectNavigationItem        ProjectNavigationItem[]
+  ProjectPage                  ProjectPage[]
+  ProjectSection               ProjectSection[]
+  ProjectTemplate              ProjectTemplate[]
+  blog_categories              blog_categories[]
+  blog_posts                   blog_posts[]
+  blog_tags                    blog_tags[]
+  club_posts                   club_posts[]
+  searchable_items             searchable_items[]
+  trip_events                  trip_events[]
+
+  @@unique([locationSlug, slug])
+  @@index([artistId])
+  @@index([city])
+  @@index([country])
+  @@index([customSubdomain])
+  @@index([festivalId])
+  @@index([locationSlug])
+  @@index([managerId])
+  @@index([organizationId])
+  @@index([slug])
+  @@index([sponsorId])
+  @@index([stripeSubscriptionId])
+  @@index([subdomainActive])
+  @@index([subscriptionStatus])
+  @@index([type])
+  @@index([venueId])
+  @@index([searchVector], map: "project_search_idx", type: Gin)
+}
+
+model ProjectMember {
+  id                                       String      @id
+  projectId                                String
+  profileId                                String
+  role                                     ProjectRole @default(VIEWER)
+  invitedBy                                String
+  joinedAt                                 DateTime    @default(now())
+  createdAt                                DateTime    @default(now())
+  updatedAt                                DateTime
+  Profile_ProjectMember_invitedByToProfile Profile     @relation("ProjectMember_invitedByToProfile", fields: [invitedBy], references: [id])
+  Profile_ProjectMember_profileIdToProfile Profile     @relation("ProjectMember_profileIdToProfile", fields: [profileId], references: [id], onDelete: Cascade)
+  Project                                  Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, profileId])
+  @@index([profileId])
+  @@index([projectId])
+  @@index([role])
+}
+
+model ProjectNavigationItem {
+  id                          String                  @id
+  projectId                   String
+  sectionId                   String?
+  label                       String
+  url                         String
+  icon                        String?
+  order                       Int                     @default(0)
+  isActive                    Boolean                 @default(true)
+  isExternal                  Boolean                 @default(false)
+  includeInHeader             Boolean                 @default(false)
+  parentId                    String?
+  createdAt                   DateTime                @default(now())
+  updatedAt                   DateTime
+  createdById                 String
+  Profile                     Profile                 @relation(fields: [createdById], references: [id])
+  ProjectNavigationItem       ProjectNavigationItem?  @relation("ProjectNavigationItemToProjectNavigationItem", fields: [parentId], references: [id], onDelete: Cascade)
+  other_ProjectNavigationItem ProjectNavigationItem[] @relation("ProjectNavigationItemToProjectNavigationItem")
+  Project                     Project                 @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  ProjectSection              ProjectSection?         @relation(fields: [sectionId], references: [id])
+  ProjectPage                 ProjectPage?
+
+  @@index([createdById])
+  @@index([parentId])
+  @@index([projectId])
+  @@index([sectionId])
+  @@index([url])
+}
+
+model ProjectPage {
+  id                    String                 @id
+  projectId             String
+  navigationItemId      String?                @unique
+  templateId            String?
+  sectionId             String?
+  title                 String
+  slug                  String
+  description           String?
+  status                PageStatus             @default(DRAFT)
+  metaTitle             String?
+  metaDescription       String?
+  ogImage               String?
+  publishedAt           DateTime?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime
+  createdById           String
+  Profile               Profile                @relation(fields: [createdById], references: [id])
+  ProjectNavigationItem ProjectNavigationItem? @relation(fields: [navigationItemId], references: [id])
+  Project               Project                @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  ProjectSection        ProjectSection?        @relation(fields: [sectionId], references: [id])
+  ProjectTemplate       ProjectTemplate?       @relation(fields: [templateId], references: [id])
+
+  @@unique([projectId, slug])
+  @@index([createdById])
+  @@index([navigationItemId])
+  @@index([projectId])
+  @@index([sectionId])
+  @@index([status])
+  @@index([templateId])
+}
+
+model ProjectSection {
+  id                    String                  @id
+  projectId             String
+  name                  String
+  slug                  String
+  description           String?
+  icon                  String?
+  order                 Int                     @default(0)
+  isActive              Boolean                 @default(true)
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime
+  createdById           String
+  ProjectNavigationItem ProjectNavigationItem[]
+  ProjectPage           ProjectPage[]
+  Profile               Profile                 @relation(fields: [createdById], references: [id])
+  Project               Project                 @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, slug])
+  @@index([createdById])
+  @@index([projectId])
+}
+
+model ProjectTemplate {
+  id          String        @id
+  projectId   String
+  name        String
+  description String?
+  config      Json
+  headerId    String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime
+  createdById String
+  footerId    String?
+  isActive    Boolean       @default(true)
+  ProjectPage ProjectPage[]
+  Profile     Profile       @relation(fields: [createdById], references: [id])
+  SiteFooter  SiteFooter?   @relation(fields: [footerId], references: [id])
+  SiteHeader  SiteHeader?   @relation(fields: [headerId], references: [id])
+  Project     Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, name])
+  @@index([createdById])
+  @@index([footerId])
+  @@index([headerId])
+  @@index([projectId])
+}
+
+model Scene {
+  id            String          @id
+  name          String?
+  description   String?
+  avgPopularity Float?
+  artistCount   Int             @default(0)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime
+  FestivalScene FestivalScene[]
+  SceneMember   SceneMember[]
+
+  @@index([artistCount])
+  @@index([avgPopularity])
+}
+
+model SceneMember {
+  id       String   @id
+  sceneId  String
+  artistId String
+  score    Float    @default(1.0)
+  joinedAt DateTime @default(now())
+  Artist   Artist   @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  Scene    Scene    @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+
+  @@unique([sceneId, artistId])
+  @@index([artistId])
+  @@index([sceneId])
+}
+
+model Section {
+  id                                   String           @id
+  name                                 String
+  slug                                 String           @unique
+  description                          String?
+  icon                                 String?
+  order                                Int              @default(0)
+  isActive                             Boolean          @default(true)
+  createdAt                            DateTime         @default(now())
+  updatedAt                            DateTime
+  createdById                          String
+  updatedById                          String?
+  isSystemSection                      Boolean          @default(false)
+  NavigationItem                       NavigationItem[]
+  Page                                 Page[]
+  Profile_Section_createdByIdToProfile Profile          @relation("Section_createdByIdToProfile", fields: [createdById], references: [id])
+  Profile_Section_updatedByIdToProfile Profile?         @relation("Section_updatedByIdToProfile", fields: [updatedById], references: [id])
+
+  @@index([createdById])
+  @@index([isActive])
+  @@index([order])
+  @@index([slug])
+}
+
+model SiteFooter {
+  id                                      String            @id
+  name                                    String            @unique
+  copyrightText                           String
+  socialLinks                             Json
+  backgroundColor                         String?
+  textColor                               String?
+  isActive                                Boolean           @default(true)
+  showOnPublicPages                       Boolean           @default(true)
+  showOnUserPages                         Boolean           @default(true)
+  showOnAdminPages                        Boolean           @default(true)
+  createdAt                               DateTime          @default(now())
+  updatedAt                               DateTime
+  createdById                             String
+  updatedById                             String?
+  ArtistTemplate                          ArtistTemplate[]
+  ProjectTemplate                         ProjectTemplate[]
+  Profile_SiteFooter_createdByIdToProfile Profile           @relation("SiteFooter_createdByIdToProfile", fields: [createdById], references: [id])
+  Profile_SiteFooter_updatedByIdToProfile Profile?          @relation("SiteFooter_updatedByIdToProfile", fields: [updatedById], references: [id])
+
+  @@index([createdById])
+  @@index([isActive])
+  @@index([name])
+}
+
+model SiteHeader {
+  id                                      String            @id
+  name                                    String
+  userId                                  String
+  logoType                                String
+  logoText                                String?
+  logoImageId                             String?
+  logoLink                                String            @default("/")
+  showAuth                                Boolean           @default(true)
+  backgroundColor                         String?
+  textColor                               String?
+  isActive                                Boolean           @default(true)
+  createdAt                               DateTime          @default(now())
+  updatedAt                               DateTime
+  createdById                             String
+  updatedById                             String?
+  ArtistTemplate                          ArtistTemplate[]
+  PageTemplate                            PageTemplate[]
+  ProjectTemplate                         ProjectTemplate[]
+  Profile_SiteHeader_createdByIdToProfile Profile           @relation("SiteHeader_createdByIdToProfile", fields: [createdById], references: [id])
+  MediaFile                               MediaFile?        @relation(fields: [logoImageId], references: [id])
+  Profile_SiteHeader_updatedByIdToProfile Profile?          @relation("SiteHeader_updatedByIdToProfile", fields: [updatedById], references: [id])
+  Profile_SiteHeader_userIdToProfile      Profile           @relation("SiteHeader_userIdToProfile", fields: [userId], references: [id], onDelete: Cascade)
+  VenueTemplate                           VenueTemplate[]
+
+  @@unique([name, userId])
+  @@index([createdById])
+  @@index([isActive])
+  @@index([logoImageId])
+  @@index([name])
+  @@index([userId])
+}
+
+model SiteSetting {
+  id          String   @id
+  key         String   @unique
+  value       Json
+  updatedAt   DateTime
+  updatedById String?
+  Profile     Profile? @relation(fields: [updatedById], references: [id])
+
+  @@index([key])
+}
+
+model Sponsor {
+  id              String            @id
+  name            String
+  slug            String            @unique
+  type            SponsorType       @default(COMPANY)
+  imageUrl        String?
+  country         String
+  city            String?
+  bio             String?
+  genres          String[]
+  email           String?
+  phone           String?
+  website         String?
+  instagram       String?
+  facebook        String?
+  linkedin        String?
+  twitter         String?
+  managerId       String
+  isActive        Boolean           @default(true)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime
+  organizationId  String?
+  EventSponsor    EventSponsor[]
+  Project         Project?
+  Profile         Profile           @relation(fields: [managerId], references: [id], onDelete: Cascade)
+  Organization    Organization?     @relation(fields: [organizationId], references: [id])
+  SponsorFollower SponsorFollower[]
+
+  @@index([managerId])
+  @@index([organizationId])
+  @@index([slug])
+}
+
+model SponsorFollower {
+  id         String   @id
+  profileId  String
+  sponsorId  String
+  followedAt DateTime @default(now())
+  Profile    Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  Sponsor    Sponsor  @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, sponsorId])
+  @@index([followedAt])
+  @@index([profileId])
+  @@index([sponsorId])
+}
+
+model SponsorRequest {
+  id                                           String               @id
+  name                                         String
+  type                                         SponsorType          @default(COMPANY)
+  logo                                         String?
+  country                                      String
+  city                                         String?
+  bio                                          String?
+  genres                                       String[]
+  email                                        String?
+  phone                                        String?
+  website                                      String?
+  instagram                                    String?
+  facebook                                     String?
+  linkedin                                     String?
+  twitter                                      String?
+  status                                       SponsorRequestStatus @default(PENDING)
+  adminNotes                                   String?
+  requesterId                                  String
+  reviewedById                                 String?
+  submittedAt                                  DateTime             @default(now())
+  reviewedAt                                   DateTime?
+  Profile_SponsorRequest_requesterIdToProfile  Profile              @relation("SponsorRequest_requesterIdToProfile", fields: [requesterId], references: [id], onDelete: Cascade)
+  Profile_SponsorRequest_reviewedByIdToProfile Profile?             @relation("SponsorRequest_reviewedByIdToProfile", fields: [reviewedById], references: [id])
+
+  @@index([requesterId])
+  @@index([reviewedById])
+  @@index([status])
+}
+
+model Stage {
+  id         String      @id
+  name       String
+  festivalId String
+  venueId    String?
+  venueName  String
+  city       String
+  region     String?
+  country    String
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime
+  status     StageStatus @default(DRAFT)
+  Event      Event[]
+  Festival   Festival    @relation(fields: [festivalId], references: [id], onDelete: Cascade)
+  Venue      Venue?      @relation(fields: [venueId], references: [id])
+
+  @@index([festivalId])
+  @@index([venueId])
+}
+
+model TastemakerRecord {
+  id                 String   @id
+  profileId          String   @unique
+  score              Int      @default(0)
+  percentile         Float    @default(0)
+  verified           Boolean  @default(false)
+  artistsBackedEarly Int      @default(0)
+  artistsSucceeded   Int      @default(0)
+  successRate        Float    @default(0)
+  avgTimingMonths    Float?
+  lastCalculated     DateTime
+  metadata           Json?
+  Profile            Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([percentile])
+  @@index([score])
+  @@index([verified])
+}
+
+model ThemeColor {
+  id         String     @id
+  themeId    String
+  name       String
+  value      String
+  format     String
+  usageTypes String[]
+  order      Int        @default(0)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime
+  ThemeGroup ThemeGroup @relation(fields: [themeId], references: [id], onDelete: Cascade)
+
+  @@unique([themeId, name])
+  @@index([order])
+  @@index([themeId])
+}
+
+model ThemeGroup {
+  id                                      String       @id
+  name                                    String       @unique
+  slug                                    String       @unique
+  description                             String?
+  createdAt                               DateTime     @default(now())
+  updatedAt                               DateTime
+  createdById                             String
+  updatedById                             String?
+  ThemeColor                              ThemeColor[]
+  Profile_ThemeGroup_createdByIdToProfile Profile      @relation("ThemeGroup_createdByIdToProfile", fields: [createdById], references: [id])
+  Profile_ThemeGroup_updatedByIdToProfile Profile?     @relation("ThemeGroup_updatedByIdToProfile", fields: [updatedById], references: [id])
+
+  @@index([name])
+  @@index([slug])
+}
+
+model TicketDesign {
+  id                  String                @id
+  eventId             String
+  name                String
+  description         String?
+  templateType        String                @default("default")
+  backgroundColor     String?
+  textColor           String?
+  accentColor         String?
+  backgroundImage     String?
+  logoImage           String?
+  isActive            Boolean               @default(true)
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime
+  CommemorativeTicket CommemorativeTicket[]
+  Event               Event                 @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+  @@index([isActive])
+}
+
+model TicketLink {
+  id         String     @id
+  tourDateId String
+  type       TicketType
+  label      String
+  url        String
+  order      Int        @default(0)
+  TourDate   TourDate   @relation(fields: [tourDateId], references: [id], onDelete: Cascade)
+
+  @@index([tourDateId])
+}
+
+model TourDate {
+  id         String       @id
+  year       Int
+  month      String
+  day        Int
+  date       DateTime
+  doorsTime  String?
+  showTime   String?
+  country    String
+  city       String
+  state      String?
+  venue      String
+  status     TourStatus   @default(SCHEDULED)
+  slug       String       @unique
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime
+  TicketLink TicketLink[]
+
+  @@index([city])
+  @@index([country])
+  @@index([date])
+  @@index([status])
+  @@index([year])
+}
+
+model UserActivity {
+  id         String   @id
+  userId     String
+  action     String
+  entityType String?
+  entityId   String?
+  metadata   Json?
+  createdAt  DateTime @default(now())
+  Profile    Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+  @@index([entityType])
+  @@index([userId])
+}
+
+model UserBlock {
+  id                                   String   @id
+  blockerId                            String
+  blockedId                            String
+  blockedAt                            DateTime @default(now())
+  reason                               String?
+  Profile_UserBlock_blockedIdToProfile Profile  @relation("UserBlock_blockedIdToProfile", fields: [blockedId], references: [id], onDelete: Cascade)
+  Profile_UserBlock_blockerIdToProfile Profile  @relation("UserBlock_blockerIdToProfile", fields: [blockerId], references: [id], onDelete: Cascade)
+
+  @@unique([blockerId, blockedId])
+  @@index([blockedAt])
+  @@index([blockedId])
+  @@index([blockerId])
+}
+
+model UserFollow {
+  id                                      String   @id
+  followerId                              String
+  followingId                             String
+  followedAt                              DateTime @default(now())
+  Profile_UserFollow_followerIdToProfile  Profile  @relation("UserFollow_followerIdToProfile", fields: [followerId], references: [id], onDelete: Cascade)
+  Profile_UserFollow_followingIdToProfile Profile  @relation("UserFollow_followingIdToProfile", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@index([followedAt])
+  @@index([followerId])
+  @@index([followingId])
+}
+
+model UserPreferences {
+  id                   String   @id
+  userId               String   @unique
+  notificationsEnabled Boolean  @default(true)
+  emailNotifications   Boolean  @default(true)
+  sidebarCollapsed     Boolean  @default(false)
+  updatedAt            DateTime
+  emailNewFollower     Boolean  @default(true)
+  emailFollowRequest   Boolean  @default(true)
+  emailEntityUpdate    Boolean  @default(true)
+  emailNewEvent        Boolean  @default(true)
+  pushNewFollower      Boolean  @default(true)
+  pushFollowRequest    Boolean  @default(true)
+  pushEntityUpdate     Boolean  @default(false)
+  pushNewEvent         Boolean  @default(true)
+  emailClubInvitation  Boolean  @default(true)
+  emailClubPostReply   Boolean  @default(true)
+  emailNewClubPost     Boolean  @default(false)
+  pushClubInvitation   Boolean  @default(true)
+  pushClubPostReply    Boolean  @default(true)
+  pushNewClubPost      Boolean  @default(false)
+  Profile              Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Venue {
+  id                                                String                  @id
+  name                                              String
+  slug                                              String                  @unique
+  location                                          String
+  description                                       String?
+  managerId                                         String
+  isActive                                          Boolean                 @default(true)
+  createdAt                                         DateTime                @default(now())
+  updatedAt                                         DateTime
+  city                                              String?
+  country                                           String?
+  metroArea                                         String?
+  region                                            String?
+  imageUrl                                          String?
+  organizationId                                    String?
+  latitude                                          Decimal?                @db.Decimal(10, 8)
+  longitude                                         Decimal?                @db.Decimal(11, 8)
+  venueType                                         VenueType?
+  wheelchairAccessible                              Boolean                 @default(false)
+  address                                           String?
+  bookingEmail                                      String?
+  bookingPhone                                      String?
+  businessHours                                     Json?
+  contactEmail                                      String?
+  contactPhone                                      String?
+  postalCode                                        String?
+  timezone                                          String?                 @default("UTC")
+  Event                                             Event[]
+  PendingVenue_PendingVenue_resolvedVenueIdToVenue  PendingVenue[]          @relation("PendingVenue_resolvedVenueIdToVenue")
+  PendingVenue_PendingVenue_suggestedVenueIdToVenue PendingVenue[]          @relation("PendingVenue_suggestedVenueIdToVenue")
+  Project                                           Project?
+  Stage                                             Stage[]
+  Profile                                           Profile                 @relation(fields: [managerId], references: [id])
+  Organization                                      Organization?           @relation(fields: [organizationId], references: [id])
+  VenueFollower                                     VenueFollower[]
+  VenueNavigationItem                               VenueNavigationItem[]
+  VenuePage                                         VenuePage[]
+  VenueSection                                      VenueSection[]
+  VenueTemplate                                     VenueTemplate[]
+  VenueTransferCooldown                             VenueTransferCooldown[]
+  VenueTransferRequest                              VenueTransferRequest[]
+
+  @@index([isActive])
+  @@index([managerId])
+  @@index([metroArea])
+  @@index([organizationId])
+  @@index([slug])
+}
+
+model VenueFollower {
+  id         String   @id
+  profileId  String
+  venueId    String
+  followedAt DateTime @default(now())
+  Profile    Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  Venue      Venue    @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, venueId])
+  @@index([followedAt])
+  @@index([profileId])
+  @@index([venueId])
+}
+
+model VenueNavigationItem {
+  id                        String                @id
+  venueId                   String
+  label                     String
+  url                       String
+  order                     Int
+  sectionId                 String?
+  parentId                  String?
+  isExternal                Boolean               @default(false)
+  includeInHeader           Boolean               @default(false)
+  createdAt                 DateTime              @default(now())
+  updatedAt                 DateTime
+  createdById               String
+  Profile                   Profile               @relation(fields: [createdById], references: [id])
+  VenueNavigationItem       VenueNavigationItem?  @relation("VenueNavigationItemToVenueNavigationItem", fields: [parentId], references: [id], onDelete: Cascade)
+  other_VenueNavigationItem VenueNavigationItem[] @relation("VenueNavigationItemToVenueNavigationItem")
+  VenueSection              VenueSection?         @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  Venue                     Venue                 @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@index([includeInHeader])
+  @@index([order])
+  @@index([parentId])
+  @@index([sectionId])
+  @@index([venueId])
+}
+
+model VenuePage {
+  id              String         @id
+  venueId         String
+  title           String
+  slug            String
+  templateId      String?
+  status          PageStatus     @default(DRAFT)
+  isHomepage      Boolean        @default(false)
+  metaTitle       String?
+  metaDescription String?
+  ogImage         String?
+  publishedAt     DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime
+  createdById     String
+  Profile         Profile        @relation(fields: [createdById], references: [id])
+  VenueTemplate   VenueTemplate? @relation(fields: [templateId], references: [id])
+  Venue           Venue          @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@unique([venueId, slug])
+  @@index([isHomepage])
+  @@index([status])
+  @@index([templateId])
+  @@index([venueId])
+}
+
+model VenueRequest {
+  id                                         String             @id
+  venueName                                  String
+  description                                String?
+  requesterId                                String?
+  status                                     VenueRequestStatus @default(PENDING)
+  adminNotes                                 String?
+  createdAt                                  DateTime           @default(now())
+  updatedAt                                  DateTime
+  reviewedAt                                 DateTime?
+  reviewedById                               String?
+  country                                    String
+  region                                     String?
+  city                                       String
+  address                                    String
+  postalCode                                 String
+  latitude                                   Decimal?           @db.Decimal(10, 8)
+  longitude                                  Decimal?           @db.Decimal(11, 8)
+  metroArea                                  String?
+  Profile_VenueRequest_requesterIdToProfile  Profile?           @relation("VenueRequest_requesterIdToProfile", fields: [requesterId], references: [id])
+  Profile_VenueRequest_reviewedByIdToProfile Profile?           @relation("VenueRequest_reviewedByIdToProfile", fields: [reviewedById], references: [id])
+
+  @@index([city])
+  @@index([country])
+  @@index([createdAt])
+  @@index([metroArea])
+  @@index([requesterId])
+  @@index([status])
+}
+
+model VenueSection {
+  id                  String                @id
+  venueId             String
+  name                String
+  slug                String
+  description         String?
+  icon                String?
+  order               Int                   @default(0)
+  isActive            Boolean               @default(true)
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime
+  createdById         String
+  VenueNavigationItem VenueNavigationItem[]
+  Profile             Profile               @relation(fields: [createdById], references: [id])
+  Venue               Venue                 @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@unique([venueId, slug])
+  @@index([isActive])
+  @@index([order])
+  @@index([slug])
+  @@index([venueId])
+}
+
+model VenueTemplate {
+  id          String      @id
+  venueId     String
+  name        String
+  description String?
+  config      Json
+  headerId    String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime
+  createdById String
+  VenuePage   VenuePage[]
+  Profile     Profile     @relation(fields: [createdById], references: [id])
+  SiteHeader  SiteHeader? @relation(fields: [headerId], references: [id])
+  Venue       Venue       @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@unique([venueId, name])
+  @@index([headerId])
+  @@index([venueId])
+}
+
+model VenueTransferCooldown {
+  id        String   @id
+  venueId   String
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  Profile   Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Venue     Venue    @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@unique([venueId, userId])
+  @@index([expiresAt])
+  @@index([userId])
+}
+
+model VenueTransferRequest {
+  id                                                     String              @id
+  venueId                                                String
+  currentOwnerId                                         String
+  requestedOwnerId                                       String
+  status                                                 VenueTransferStatus @default(PENDING)
+  message                                                String?
+  adminNotes                                             String?
+  expiresAt                                              DateTime
+  createdAt                                              DateTime            @default(now())
+  updatedAt                                              DateTime
+  reviewedAt                                             DateTime?
+  reviewedById                                           String?
+  Profile_VenueTransferRequest_currentOwnerIdToProfile   Profile             @relation("VenueTransferRequest_currentOwnerIdToProfile", fields: [currentOwnerId], references: [id])
+  Profile_VenueTransferRequest_requestedOwnerIdToProfile Profile             @relation("VenueTransferRequest_requestedOwnerIdToProfile", fields: [requestedOwnerId], references: [id])
+  Profile_VenueTransferRequest_reviewedByIdToProfile     Profile?            @relation("VenueTransferRequest_reviewedByIdToProfile", fields: [reviewedById], references: [id])
+  Venue                                                  Venue               @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+  @@index([expiresAt])
+  @@index([requestedOwnerId])
+  @@index([status])
+  @@index([venueId, status])
+}
+
+model blog_categories {
+  id              String            @id
+  projectId       String
+  name            String
+  slug            String
+  description     String?
+  order           Int               @default(0)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime
+  Project         Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  post_categories post_categories[]
+
+  @@unique([projectId, slug])
+  @@index([projectId])
+}
+
+model blog_posts {
+  id              String            @id
+  projectId       String
+  authorId        String
+  title           String
+  slug            String
+  content         String
+  excerpt         String?
+  featuredImage   String?
+  status          PostStatus        @default(DRAFT)
+  publishedAt     DateTime?
+  scheduledAt     DateTime?
+  readingTime     Int?
+  viewCount       Int               @default(0)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime
+  Profile         Profile           @relation(fields: [authorId], references: [id])
+  Project         Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  post_categories post_categories[]
+  post_comments   post_comments[]
+  post_embeds     post_embeds[]
+  post_tags       post_tags[]
+
+  @@unique([projectId, slug])
+  @@index([authorId])
+  @@index([projectId, status])
+  @@index([publishedAt])
+  @@index([scheduledAt])
+}
+
+model blog_tags {
+  id        String      @id
+  projectId String
+  name      String
+  slug      String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime
+  Project   Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  post_tags post_tags[]
+
+  @@unique([projectId, slug])
+  @@index([projectId])
+}
+
+model club_post_reactions {
+  id         String     @id
+  postId     String
+  profileId  String
+  type       String     @default("like")
+  createdAt  DateTime   @default(now())
+  club_posts club_posts @relation(fields: [postId], references: [id], onDelete: Cascade)
+  Profile    Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, profileId, type])
+  @@index([postId])
+  @@index([profileId])
+}
+
+model club_post_replies {
+  id                   String                 @id
+  postId               String
+  authorId             String
+  content              String
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime
+  Profile              Profile                @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  club_posts           club_posts             @relation(fields: [postId], references: [id], onDelete: Cascade)
+  club_reply_reactions club_reply_reactions[]
+
+  @@index([authorId])
+  @@index([postId, createdAt(sort: Desc)])
+}
+
+model club_posts {
+  id                  String                @id
+  projectId           String
+  authorId            String
+  content             String
+  isPinned            Boolean               @default(false)
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime
+  club_post_reactions club_post_reactions[]
+  club_post_replies   club_post_replies[]
+  Profile             Profile               @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  Project             Project               @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([authorId])
+  @@index([isPinned, createdAt(sort: Desc)])
+  @@index([projectId, createdAt(sort: Desc)])
+}
+
+model club_reply_reactions {
+  id                String            @id
+  replyId           String
+  profileId         String
+  type              String            @default("like")
+  createdAt         DateTime          @default(now())
+  Profile           Profile           @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  club_post_replies club_post_replies @relation(fields: [replyId], references: [id], onDelete: Cascade)
+
+  @@unique([replyId, profileId, type])
+  @@index([profileId])
+  @@index([replyId])
+}
+
+model content_reports {
+  id                                          String    @id
+  reporterId                                  String
+  reportedId                                  String?
+  entityType                                  String
+  entityId                                    String
+  reason                                      String
+  category                                    String?
+  status                                      String    @default("pending")
+  reviewedBy                                  String?
+  reviewedAt                                  DateTime?
+  notes                                       String?
+  createdAt                                   DateTime  @default(now())
+  Profile_content_reports_reportedIdToProfile Profile?  @relation("content_reports_reportedIdToProfile", fields: [reportedId], references: [id], onDelete: Cascade)
+  Profile_content_reports_reporterIdToProfile Profile   @relation("content_reports_reporterIdToProfile", fields: [reporterId], references: [id], onDelete: Cascade)
+  Profile_content_reports_reviewedByToProfile Profile?  @relation("content_reports_reviewedByToProfile", fields: [reviewedBy], references: [id])
+
+  @@index([entityType, entityId])
+  @@index([reportedId])
+  @@index([reporterId])
+  @@index([status, createdAt])
+}
+
+model post_categories {
+  id              String          @id
+  postId          String
+  categoryId      String
+  blog_categories blog_categories @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  blog_posts      blog_posts      @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, categoryId])
+  @@index([categoryId])
+  @@index([postId])
+}
+
+model post_comments {
+  id                  String          @id
+  postId              String
+  authorId            String
+  content             String
+  parentId            String?
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime
+  Profile             Profile         @relation(fields: [authorId], references: [id])
+  post_comments       post_comments?  @relation("post_commentsTopost_comments", fields: [parentId], references: [id], onDelete: Cascade)
+  other_post_comments post_comments[] @relation("post_commentsTopost_comments")
+  blog_posts          blog_posts      @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([authorId])
+  @@index([parentId])
+  @@index([postId])
+}
+
+model post_embeds {
+  id         String     @id
+  postId     String
+  entityType EmbedType
+  entityId   String
+  createdAt  DateTime   @default(now())
+  blog_posts blog_posts @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, entityType, entityId])
+  @@index([entityType, entityId])
+}
+
+model post_tags {
+  id         String     @id
+  postId     String
+  tagId      String
+  blog_posts blog_posts @relation(fields: [postId], references: [id], onDelete: Cascade)
+  blog_tags  blog_tags  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, tagId])
+  @@index([postId])
+  @@index([tagId])
+}
+
+model recommendation_cache {
+  id         String   @id
+  profileId  String
+  entityType String
+  entityId   String
+  score      Float
+  reason     String
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime
+  Profile    Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, entityType, entityId])
+  @@index([expiresAt])
+  @@index([profileId, entityType, score])
+}
+
+model searchable_items {
+  id          String                   @id
+  entityType  String
+  entityId    String
+  title       String
+  description String?
+  genres      String[]
+  cityId      String?
+  projectId   String
+  embedding   Unsupported("vector")?
+  status      String
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime
+  venue_name  String?
+  search_text Unsupported("tsvector")?
+  City        City?                    @relation(fields: [cityId], references: [id])
+  Project     Project                  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([entityType, entityId])
+  @@index([cityId])
+  @@index([projectId])
+  @@index([search_text], type: Gin)
+  @@index([status])
+  @@index([venue_name])
+}
+
+model subdomain_blacklist {
+  id        String   @id
+  name      String   @unique
+  slug      String   @unique
+  reason    String?
+  addedById String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  Profile   Profile  @relation(fields: [addedById], references: [id])
+
+  @@index([addedById])
+  @@index([slug])
+}
+
+model trip_events {
+  id          String    @id
+  projectId   String
+  eventId     String
+  order       Int
+  arrivalDate DateTime?
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime
+  Event       Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  Project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, eventId])
+  @@index([projectId, order])
+}
+
+enum PendingMemberStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  DUPLICATE
+}
+
+enum ArtistRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum EmbedType {
+  EVENT
+  ARTIST
+  VENUE
+  FESTIVAL
+  SPONSOR
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+}
+
+enum EventType {
+  OFFICIAL
+  FAN_SATELLITE
+  FAN_STANDALONE
+}
+
+enum FestivalRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum FollowRequirement {
+  ANYONE
+  APPROVAL
+  NONE
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  EXPIRED
+  REVOKED
+}
+
+enum NotificationType {
+  PAGE_PUBLISHED
+  PAGE_COMMENT
+  USER_MENTION
+  SYSTEM_ALERT
+  MEDIA_UPLOAD
+  ORGANIZATION_INVITATION
+  NEW_FOLLOWER
+  FOLLOW_REQUEST
+  FOLLOW_ACCEPTED
+  ENTITY_UPDATE
+  NEW_EVENT
+  VENUE_TRANSFER_REQUEST
+  VENUE_TRANSFER_APPROVED
+  VENUE_TRANSFER_DECLINED
+  NEW_CLUB_POST
+  CLUB_POST_REPLY
+  CLUB_INVITATION
+  CLUB_ROLE_CHANGED
+}
+
+enum OrganizationRole {
+  OWNER
+  COLLABORATOR
+}
+
+enum PageAccessLevel {
+  PUBLIC
+  MEMBERS_ONLY
+  ROLE_RESTRICTED
+  PRIVATE
+}
+
+enum PageStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
+}
+
+enum PendingVenueStatus {
+  PENDING
+  PROMOTED
+  LINKED
+  REJECTED
+}
+
+enum PopularityTier {
+  MAINSTREAM
+  ESTABLISHED
+  RISING
+  UNDERGROUND
+  UNKNOWN
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  SCHEDULED
+  ARCHIVED
+}
+
+enum ProfileVisibility {
+  PUBLIC
+  FOLLOWERS
+  PRIVATE
+}
+
+enum ProjectRole {
+  OWNER
+  EDITOR
+  VIEWER
+}
+
+enum ProjectType {
+  VENUE
+  ARTIST
+  FESTIVAL
+  SPONSOR
+  EVENT
+  FAN
+  FAN_CLUB
+  ROAD_TRIP
+}
+
+enum ProjectVisibility {
+  PRIVATE
+  PUBLIC
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+  CONTRIBUTOR
+  MEMBER
+}
+
+enum Severity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum SponsorRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum SponsorType {
+  INDIVIDUAL
+  COMPANY
+  BRAND
+}
+
+enum StageStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum StorageType {
+  S3
+  REMOTE
+}
+
+enum SubmissionStatus {
+  NEW
+  READ
+  ARCHIVED
+}
+
+enum SubmissionType {
+  BUG
+  FEEDBACK
+  FEATURE_REQUEST
+}
+
+enum SubscriptionPlan {
+  FREE
+  MONTHLY
+  ANNUAL
+}
+
+enum SubscriptionStatus {
+  NONE
+  ACTIVE
+  PAST_DUE
+  CANCELING
+  CANCELLED
+  EXPIRED
+  UNPAID
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  TRIALING
+  PAUSED
+}
+
+enum TicketType {
+  TICKETS
+  RESALE
+  INFO
+}
+
+enum TourStatus {
+  SCHEDULED
+  SOLD_OUT
+  CANCELLED
+  POSTPONED
+  COMPLETED
+}
+
+enum VenueRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum VenueTransferStatus {
+  PENDING
+  APPROVED
+  DECLINED
+  EXPIRED
+  CANCELLED
+}
+
+enum VenueType {
+  INDOOR
+  OUTDOOR
+  MIXED
 }
