@@ -51,6 +51,28 @@ export default async function ArtistPage({ params }: PageProps) {
         },
         orderBy: [{ isActive: "desc" }, { startYear: "asc" }],
       },
+      FestivalLineup: {
+        select: {
+          Festival: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              startDate: true,
+              endDate: true,
+              location: true,
+              city: true,
+              country: true,
+              imageUrl: true,
+            },
+          },
+        },
+        orderBy: {
+          Festival: {
+            startDate: "desc",
+          },
+        },
+      },
       connections: {
         select: {
           connectedArtist: {
@@ -164,12 +186,16 @@ export default async function ArtistPage({ params }: PageProps) {
     return reasons.join(" · ") || "related";
   }
 
+  // Extract festivals from FestivalLineup
+  const festivals = artist.FestivalLineup.map((lineup) => lineup.Festival);
+
   return (
     <ArtistContent
       artist={artist}
       currentMembers={currentMembers}
       pastMembers={pastMembers}
       relatedArtists={relatedArtists}
+      festivals={festivals}
     />
   );
 }

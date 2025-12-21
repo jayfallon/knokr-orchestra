@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import MemberCard from "@/components/MemberCard";
 import MemberForm from "@/components/MemberForm";
+import FestivalCard from "@/components/FestivalCard";
 import { getArtistImageUrl } from "@/lib/image";
 
 interface Member {
@@ -52,15 +53,33 @@ interface RelatedArtist {
   connectionReason: string;
 }
 
+interface Festival {
+  id: string;
+  name: string;
+  slug: string;
+  startDate: Date;
+  endDate: Date | null;
+  location: string;
+  city: string;
+  country: string;
+  imageUrl: string | null;
+}
+
 interface Props {
   artist: Artist;
   currentMembers: Member[];
   pastMembers: Member[];
   relatedArtists: RelatedArtist[];
+  festivals: Festival[];
 }
 
-export default function ArtistContent({ artist, currentMembers, pastMembers, relatedArtists }: Props) {
+export default function ArtistContent({ artist, currentMembers, pastMembers, relatedArtists, festivals }: Props) {
   const [showForm, setShowForm] = useState(false);
+
+  // Split festivals into upcoming and past
+  const now = new Date();
+  const upcomingFestivals = festivals.filter((f) => new Date(f.startDate) >= now);
+  const pastFestivals = festivals.filter((f) => new Date(f.startDate) < now);
 
   return (
     <div className="min-h-screen bg-[#fdf5d4]">
@@ -174,6 +193,41 @@ export default function ArtistContent({ artist, currentMembers, pastMembers, rel
                 <MemberCard key={member.id} member={member} />
               ))}
             </div>
+          </section>
+        )}
+
+        {/* Festivals */}
+        {festivals.length > 0 && (
+          <section className="mb-12">
+            <h2 className="text-3xl font-semibold text-[#4c222a] mb-6 uppercase tracking-wide">
+              Festivals ({festivals.length})
+            </h2>
+
+            {upcomingFestivals.length > 0 && (
+              <div className="mb-8">
+                <h3 className="text-xl font-medium text-[#4c222a]/80 mb-4 uppercase tracking-wide">
+                  Upcoming
+                </h3>
+                <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                  {upcomingFestivals.map((festival) => (
+                    <FestivalCard key={festival.id} festival={festival} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {pastFestivals.length > 0 && (
+              <div>
+                <h3 className="text-xl font-medium text-[#4c222a]/80 mb-4 uppercase tracking-wide">
+                  Past
+                </h3>
+                <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                  {pastFestivals.map((festival) => (
+                    <FestivalCard key={festival.id} festival={festival} />
+                  ))}
+                </div>
+              </div>
+            )}
           </section>
         )}
 
