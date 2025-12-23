@@ -11,7 +11,7 @@ export default function Home() {
       <div className="absolute top-4 right-4">
         <SignedOut>
           <SignInButton mode="modal">
-            <button className="px-5 py-2 text-sm text-[#ba326b] hover:text-[#4c222a] border border-[#ba326b]/30 hover:border-[#ba326b]/50 rounded-full transition-colors">
+            <button className="px-5 py-2 text-sm text-[#A21534] hover:text-[#A21534] border border-[#A21534]/30 hover:border-[#A21534]/50 rounded-full transition-colors">
               Sign In
             </button>
           </SignInButton>
@@ -38,35 +38,35 @@ export default function Home() {
             className="mb-5 mx-auto"
             priority
           />
-          <h1 className="text-[42px] font-extrabold text-[#ba326b] tracking-tight">
+          <h1 className="text-[42px] font-extrabold text-[#A21534] tracking-tight">
             Who&apos;s in the Band?
           </h1>
-          <p className="text-[#4c222a]/70 text-base mt-2">
+          <p className="text-[#A21534]/70 text-base mt-2">
             Search for any artist and contribute band member info
           </p>
         </header>
 
         <SearchInput />
-        <p className="text-[#4c222a]/70 text-base my-4">or</p>
+        <p className="text-[#A21534]/70 text-base my-4">or</p>
         <SuggestBand />
 
         {/* Footer */}
-        <footer className="mt-10 pt-6 text-center text-sm text-[#4c222a]/50 border-t border-[#ba326b]/20 w-full">
+        <footer className="mt-10 pt-6 text-center text-sm text-[#A21534]/50 border-t border-[#A21534]/20 w-full">
           <div className="mb-3">
-            <Link href="/terms" className="text-[#ba326b] mx-3 hover:underline">
+            <Link href="/terms" className="text-[#A21534] mx-3 hover:underline">
               Terms of Service
             </Link>
-            <Link href="/privacy" className="text-[#ba326b] mx-3 hover:underline">
+            <Link href="/privacy" className="text-[#A21534] mx-3 hover:underline">
               Privacy & Data
             </Link>
           </div>
-          <div className="text-[#4c222a]/50">
+          <div className="text-[#A21534]/50">
             &copy; {new Date().getFullYear()}{" "}
             <a
               href="https://knokr.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#ba326b] hover:underline"
+              className="text-[#A21534] hover:underline"
             >
               Knokr
             </a>

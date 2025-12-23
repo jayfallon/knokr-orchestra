@@ -81,7 +81,14 @@ export default async function ArtistPage({ params }: PageProps) {
               name: true,
               slug: true,
               imageUrl: true,
-              location: true,
+              city: true,
+              region: true,
+              country: true,
+              instagram: true,
+              facebook: true,
+              youtube: true,
+              spotify: true,
+              tiktok: true,
             },
           },
           weight: true,
@@ -101,7 +108,14 @@ export default async function ArtistPage({ params }: PageProps) {
               name: true,
               slug: true,
               imageUrl: true,
-              location: true,
+              city: true,
+              region: true,
+              country: true,
+              instagram: true,
+              facebook: true,
+              youtube: true,
+              spotify: true,
+              tiktok: true,
             },
           },
           weight: true,
@@ -122,16 +136,27 @@ export default async function ArtistPage({ params }: PageProps) {
   const memberNames = artist.members.map((m) => m.name);
   const matchingArtists = await prisma.artist.findMany({
     where: { name: { in: memberNames } },
-    select: { name: true, imageUrl: true },
+    select: { name: true, slug: true, imageUrl: true, city: true, region: true, country: true, instagram: true, facebook: true, youtube: true, spotify: true, tiktok: true },
   });
   const artistDataMap = new Map(matchingArtists.map((a) => [a.name, a]));
 
-  // If member exists as Artist, use Artist imageUrl
+  // If member exists as Artist, use Artist data
   const membersWithArtistData = artist.members.map((m) => {
     const artistRecord = artistDataMap.get(m.name);
+    const socials: { network: string; url: string }[] = [];
+    if (artistRecord?.instagram) socials.push({ network: "instagram", url: artistRecord.instagram });
+    if (artistRecord?.facebook) socials.push({ network: "facebook", url: artistRecord.facebook });
+    if (artistRecord?.youtube) socials.push({ network: "youtube", url: artistRecord.youtube });
+    if (artistRecord?.spotify) socials.push({ network: "spotify", url: artistRecord.spotify });
+    if (artistRecord?.tiktok) socials.push({ network: "tiktok", url: artistRecord.tiktok });
     return {
       ...m,
+      slug: artistRecord?.slug ?? null,
       imageUrl: artistRecord?.imageUrl ?? m.imageUrl,
+      city: artistRecord?.city ?? null,
+      region: artistRecord?.region ?? null,
+      country: artistRecord?.country ?? null,
+      socials,
     };
   });
 
@@ -171,10 +196,25 @@ export default async function ArtistPage({ params }: PageProps) {
       return true;
     })
     .slice(0, 24)
-    .map((c) => ({
-      ...c.artist,
-      connectionReason: getConnectionReason(c),
-    }));
+    .map((c) => {
+      const socials: { network: string; url: string }[] = [];
+      if (c.artist.instagram) socials.push({ network: "instagram", url: c.artist.instagram });
+      if (c.artist.facebook) socials.push({ network: "facebook", url: c.artist.facebook });
+      if (c.artist.youtube) socials.push({ network: "youtube", url: c.artist.youtube });
+      if (c.artist.spotify) socials.push({ network: "spotify", url: c.artist.spotify });
+      if (c.artist.tiktok) socials.push({ network: "tiktok", url: c.artist.tiktok });
+      return {
+        id: c.artist.id,
+        name: c.artist.name,
+        slug: c.artist.slug,
+        imageUrl: c.artist.imageUrl,
+        city: c.artist.city,
+        region: c.artist.region,
+        country: c.artist.country,
+        socials,
+        connectionReason: getConnectionReason(c),
+      };
+    });
 
   function getConnectionReason(c: { sharedFestivals: number; sharedMembers: number; sharedGenres: number; sameCity: boolean; sameRegion: boolean }) {
     const reasons: string[] = [];
