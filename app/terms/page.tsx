@@ -8,8 +8,8 @@ export const metadata = {
 export default function TermsPage() {
   return (
     <div className="min-h-screen">
-      <header className="border-b border-white/20">
-        <div className="max-w-3xl mx-auto px-4 py-4">
+      <header>
+        <div className="max-w-7xl mx-auto px-4 py-4 border-b border-white/20">
           <Link href="/" className="text-sm text-white hover:text-[#3399FF]">
             ← Back to search
           </Link>

@@ -2,8 +2,8 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="mt-10 pt-6 pb-6 text-center text-sm text-white/50 border-t border-white/20">
-      <div className="max-w-7xl mx-auto px-4">
+    <footer className="mt-10 pb-6 text-center text-sm text-white/50">
+      <div className="max-w-7xl mx-auto px-4 pt-6 border-t border-white/20">
         <div className="mb-3">
           <Link href="/terms" className="text-white mx-3 hover:text-[#3399FF]">
             Terms of Service

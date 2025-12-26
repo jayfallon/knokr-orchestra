@@ -102,8 +102,8 @@ export default function ArtistContent({ artist, currentMembers, pastMembers, rel
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-white/20">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <header>
+        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center border-b border-white/20">
           <Link href="/" className="px-6 py-2.5 bg-[#000A14] text-white rounded-full text-sm font-medium hover:text-[#3399FF] cursor-pointer uppercase tracking-wide">
             Back
           </Link>
