@@ -69,21 +69,21 @@ export default function SearchInput() {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search for an artist or band..."
-        className="w-full px-6 py-4 text-lg text-[#4c222a] bg-white border-2 border-[#ba326b]/30 rounded-full focus:outline-none focus:border-[#ba326b] placeholder:text-[#4c222a]/40"
+        className="w-full px-6 py-4 text-lg text-white bg-white/10 border-2 border-white/30 rounded-full focus:outline-none focus:border-[#3399FF] placeholder:text-white/40"
       />
       {loading && (
         <div className="absolute right-4 top-1/2 -translate-y-1/2">
-          <div className="w-5 h-5 border-2 border-[#ba326b]/30 border-t-[#ba326b] rounded-full animate-spin" />
+          <div className="w-5 h-5 border-2 border-white/30 border-t-[#3399FF] rounded-full animate-spin" />
         </div>
       )}
 
       {isOpen && results.length > 0 && (
-        <ul className="absolute z-10 w-full mt-2 bg-white border border-[#ba326b]/20 rounded-xl shadow-lg max-h-96 overflow-auto">
+        <ul className="absolute z-10 w-full mt-2 bg-[#000A14] border border-white/20 rounded-xl shadow-lg max-h-96 overflow-auto">
           {results.map((artist) => (
             <li key={artist.id}>
               <button
                 onClick={() => selectArtist(artist.slug)}
-                className="w-full px-4 py-3 flex items-center gap-4 hover:bg-[#fdf5d4] text-left"
+                className="w-full px-4 py-3 flex items-center gap-4 hover:bg-white/10 text-left"
               >
                 {getArtistImageUrl(artist.imageUrl) ? (
                   <div className="relative w-16 h-10 rounded overflow-hidden flex-shrink-0">
@@ -96,13 +96,13 @@ export default function SearchInput() {
                     />
                   </div>
                 ) : (
-                  <div className="w-16 h-10 rounded bg-[#ba326b]/20 flex items-center justify-center text-[#ba326b] flex-shrink-0">
+                  <div className="w-16 h-10 rounded bg-[#0080FF]/20 flex items-center justify-center text-white flex-shrink-0">
                     {artist.name[0]}
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-[#4c222a] truncate">{artist.name}</p>
-                  <p className="text-sm text-[#4c222a]/60 truncate">
+                  <p className="font-medium text-white truncate">{artist.name}</p>
+                  <p className="text-sm text-white/60 truncate">
                     {artist.location} {artist.memberCount > 0 && `· ${artist.memberCount} members`}
                   </p>
                 </div>
@@ -113,7 +113,7 @@ export default function SearchInput() {
       )}
 
       {isOpen && query.length >= 2 && results.length === 0 && !loading && (
-        <div className="absolute z-10 w-full mt-2 px-4 py-3 bg-white border border-[#ba326b]/20 rounded-xl shadow-lg text-[#4c222a]/60">
+        <div className="absolute z-10 w-full mt-2 px-4 py-3 bg-[#000A14] border border-white/20 rounded-xl shadow-lg text-white/60">
           No artists found
         </div>
       )}

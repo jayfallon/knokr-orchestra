@@ -28,7 +28,8 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#fdf5d4] text-[#4c222a]`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}
+          style={{ background: "linear-gradient(180deg, #0080FF 0%, #0066CC 25%, #003366 50%, #001F3D 75%, #001429 100%)" }}
         >
           <Providers>
             {children}

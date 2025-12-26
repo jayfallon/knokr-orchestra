@@ -39,7 +39,7 @@ export default function FestivalCard({ festival }: { festival: Festival }) {
 
   return (
     <a href={knokrUrl} target="_blank" rel="noopener noreferrer">
-      <Card className="h-full transition-all duration-200 hover:shadow-lg hover:scale-[1.02] rounded-xl bg-white border border-[#ba326b]/10">
+      <Card className="h-full transition-all duration-200 hover:shadow-lg hover:scale-[1.02] rounded-xl bg-[#000A14] border border-white/10">
         <CardBody className="p-0">
           <div className="relative overflow-hidden rounded-t-xl" style={{ aspectRatio: "1.618 / 1" }}>
             {festival.imageUrl ? (
@@ -51,9 +51,9 @@ export default function FestivalCard({ festival }: { festival: Festival }) {
                 className="object-cover transition-transform duration-300 hover:scale-105"
               />
             ) : (
-              <div className="flex w-full h-full items-center justify-center bg-gradient-to-br from-[#610553]/20 to-[#ba326b]/20">
+              <div className="flex w-full h-full items-center justify-center bg-gradient-to-br from-[#0080FF]/20 to-[#003366]/20">
                 <svg
-                  className="h-1/3 w-1/3 text-[#ba326b]/50"
+                  className="h-1/3 w-1/3 text-white/50"
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -92,18 +92,18 @@ export default function FestivalCard({ festival }: { festival: Festival }) {
               <Chip
                 size="sm"
                 variant="flat"
-                className="bg-[#610553]/90 text-[#fdf5d4] text-xs"
+                className="bg-[#000A14]/90 text-white text-xs"
               >
                 {dateRange}
               </Chip>
             </div>
           </div>
 
-          <div className="p-4 bg-gradient-to-b from-white to-[#fdf5d4]/50">
-            <p className="text-lg font-semibold text-[#4c222a] hover:text-[#ba326b] line-clamp-1">
+          <div className="p-4">
+            <p className="text-lg font-semibold text-white hover:text-[#3399FF] line-clamp-1">
               {festival.name}
             </p>
-            <p className="text-sm text-[#4c222a]/60 line-clamp-1">
+            <p className="text-sm text-white/60 line-clamp-1">
               {festival.city}, {festival.country}
             </p>
           </div>

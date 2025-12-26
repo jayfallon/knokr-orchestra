@@ -73,15 +73,15 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
   if (success) {
     return (
       <div className="p-6 text-center">
-        <div className="text-4xl mb-4 text-[#ba326b]">✓</div>
-        <h3 className="text-xl font-semibold mb-2 text-[#4c222a]">Thank you!</h3>
-        <p className="text-[#4c222a]/60 mb-4">Your submission is pending review.</p>
+        <div className="text-4xl mb-4 text-[#3399FF]">✓</div>
+        <h3 className="text-xl font-semibold mb-2 text-white">Thank you!</h3>
+        <p className="text-white/60 mb-4">Your submission is pending review.</p>
         <button
           onClick={() => {
             setSuccess(false);
             onClose?.();
           }}
-          className="px-6 py-2.5 bg-[#610553] text-[#fdf5d4] rounded-full hover:bg-[#4a0440] cursor-pointer"
+          className="px-6 py-2.5 bg-[#000A14] text-white rounded-full hover:text-[#3399FF] cursor-pointer border border-white/20"
         >
           Close
         </button>
@@ -92,7 +92,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && (
-        <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm">
+        <div className="p-3 bg-red-500/20 text-red-400 rounded-lg text-sm border border-red-500/30">
           {error}
         </div>
       )}
@@ -101,25 +101,25 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
       <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
 
       <div>
-        <label className="block text-sm font-medium mb-1 text-[#4c222a]">Name *</label>
+        <label className="block text-sm font-medium mb-1 text-white">Name *</label>
         <input
           type="text"
           name="name"
           required
-          className="w-full px-3 py-2 border border-[#ba326b]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ba326b]/50 text-[#4c222a]"
+          className="w-full px-3 py-2 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3399FF]/50 bg-white/10 text-white"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1 text-[#4c222a]">Role *</label>
+        <label className="block text-sm font-medium mb-1 text-white">Role *</label>
         <select
           name="role"
           required
-          className="w-full px-3 py-2 border border-[#ba326b]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ba326b]/50 text-[#4c222a]"
+          className="w-full px-3 py-2 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3399FF]/50 bg-white/10 text-white"
         >
-          <option value="">Select a role</option>
+          <option value="" className="bg-[#000A14]">Select a role</option>
           {MEMBER_ROLES.map((role) => (
-            <option key={role} value={role}>
+            <option key={role} value={role} className="bg-[#000A14]">
               {role.charAt(0).toUpperCase() + role.slice(1)}
             </option>
           ))}
@@ -132,61 +132,61 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
           name="isActive"
           id="isActive"
           defaultChecked
-          className="rounded border-[#ba326b]/30 text-[#ba326b] focus:ring-[#ba326b]"
+          className="rounded border-white/20 text-[#3399FF] focus:ring-[#3399FF] bg-white/10"
         />
-        <label htmlFor="isActive" className="text-sm text-[#4c222a]">Currently active member</label>
+        <label htmlFor="isActive" className="text-sm text-white">Currently active member</label>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1 text-[#4c222a]">Start Year</label>
+          <label className="block text-sm font-medium mb-1 text-white">Start Year</label>
           <input
             type="number"
             name="startYear"
             min="1900"
             max={new Date().getFullYear()}
-            className="w-full px-3 py-2 border border-[#ba326b]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ba326b]/50 text-[#4c222a]"
+            className="w-full px-3 py-2 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3399FF]/50 bg-white/10 text-white"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1 text-[#4c222a]">End Year</label>
+          <label className="block text-sm font-medium mb-1 text-white">End Year</label>
           <input
             type="number"
             name="endYear"
             min="1900"
             max={new Date().getFullYear()}
-            className="w-full px-3 py-2 border border-[#ba326b]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ba326b]/50 text-[#4c222a]"
+            className="w-full px-3 py-2 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3399FF]/50 bg-white/10 text-white"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1 text-[#4c222a]">Image URL</label>
+        <label className="block text-sm font-medium mb-1 text-white">Image URL</label>
         <input
           type="url"
           name="imageUrl"
           placeholder="https://..."
-          className="w-full px-3 py-2 border border-[#ba326b]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ba326b]/50 text-[#4c222a] placeholder:text-[#4c222a]/40"
+          className="w-full px-3 py-2 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3399FF]/50 bg-white/10 text-white placeholder:text-white/40"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1 text-[#4c222a]">Wikipedia URL</label>
+        <label className="block text-sm font-medium mb-1 text-white">Wikipedia URL</label>
         <input
           type="url"
           name="wikipediaUrl"
           placeholder="https://en.wikipedia.org/wiki/..."
-          className="w-full px-3 py-2 border border-[#ba326b]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ba326b]/50 text-[#4c222a] placeholder:text-[#4c222a]/40"
+          className="w-full px-3 py-2 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3399FF]/50 bg-white/10 text-white placeholder:text-white/40"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1 text-[#4c222a]">Notes</label>
+        <label className="block text-sm font-medium mb-1 text-white">Notes</label>
         <textarea
           name="note"
           rows={2}
           placeholder="Any additional information..."
-          className="w-full px-3 py-2 border border-[#ba326b]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ba326b]/50 text-[#4c222a] placeholder:text-[#4c222a]/40 resize-none"
+          className="w-full px-3 py-2 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3399FF]/50 bg-white/10 text-white placeholder:text-white/40 resize-none"
         />
       </div>
 
@@ -206,7 +206,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 px-4 py-2.5 bg-[#fdf5d4] text-[#610553] rounded-full hover:bg-[#f5ebb8] cursor-pointer"
+            className="flex-1 px-4 py-2.5 bg-white/10 text-white rounded-full hover:text-[#3399FF] cursor-pointer border border-white/20"
           >
             Cancel
           </button>
@@ -214,7 +214,7 @@ export default function MemberForm({ artistId, onSuccess, onClose }: Props) {
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 px-4 py-2.5 bg-[#610553] text-[#fdf5d4] rounded-full hover:bg-[#4a0440] disabled:opacity-50 cursor-pointer"
+          className="flex-1 px-4 py-2.5 bg-[#000A14] text-white rounded-full hover:text-[#3399FF] disabled:opacity-50 cursor-pointer border border-white/20"
         >
           {loading ? "Submitting..." : "Submit"}
         </button>

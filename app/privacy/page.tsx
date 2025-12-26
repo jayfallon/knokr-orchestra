@@ -6,23 +6,23 @@ export const metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-[#fdf5d4]">
-      <header className="border-b border-[#ba326b]/20">
+    <div className="min-h-screen">
+      <header className="border-b border-white/20">
         <div className="max-w-3xl mx-auto px-4 py-4">
-          <Link href="/" className="text-sm text-[#ba326b] hover:text-[#4c222a]">
+          <Link href="/" className="text-sm text-white hover:text-[#3399FF]">
             ← Back to search
           </Link>
         </div>
       </header>
 
       <main className="max-w-3xl mx-auto px-4 py-12">
-        <h1 className="text-4xl font-bold text-[#4c222a] mb-8 uppercase tracking-wide">
+        <h1 className="text-4xl font-bold text-white mb-8 uppercase tracking-wide">
           Privacy & Data
         </h1>
 
-        <div className="space-y-6 text-[#4c222a]/80">
+        <div className="space-y-6 text-white/80">
             <section>
-              <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
+              <h2 className="text-lg font-semibold text-white mb-2">
                 Information We Collect
               </h2>
               <p>When you use Orchestra, we may collect:</p>
@@ -43,7 +43,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
+              <h2 className="text-lg font-semibold text-white mb-2">
                 How We Use Your Information
               </h2>
               <p>
@@ -55,7 +55,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
+              <h2 className="text-lg font-semibold text-white mb-2">
                 Data Sharing
               </h2>
               <p>
@@ -66,7 +66,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
+              <h2 className="text-lg font-semibold text-white mb-2">
                 Your Rights
               </h2>
               <p>You have the right to:</p>
@@ -78,7 +78,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
+              <h2 className="text-lg font-semibold text-white mb-2">
                 Security
               </h2>
               <p>
@@ -88,7 +88,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
+              <h2 className="text-lg font-semibold text-white mb-2">
                 Third-Party Services
               </h2>
               <ul className="list-disc list-inside mt-2 space-y-1">
@@ -98,14 +98,14 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
+              <h2 className="text-lg font-semibold text-white mb-2">
                 Contact
               </h2>
               <p>
                 For privacy inquiries or data requests, please contact{" "}
                 <a
                   href="mailto:privacy@knokr.com"
-                  className="text-[#ba326b] hover:underline"
+                  className="text-white hover:text-[#3399FF]"
                 >
                   privacy@knokr.com
                 </a>

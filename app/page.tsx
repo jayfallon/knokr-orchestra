@@ -6,12 +6,12 @@ import SuggestBand from "@/components/SuggestBand";
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col items-center bg-[#fdf5d4] px-5 py-10">
+    <div className="min-h-screen flex flex-col items-center px-5 py-10">
       {/* Auth button - top right */}
       <div className="absolute top-4 right-4">
         <SignedOut>
           <SignInButton mode="modal">
-            <button className="px-5 py-2 text-sm text-[#A21534] hover:text-[#A21534] border border-[#A21534]/30 hover:border-[#A21534]/50 rounded-full transition-colors">
+            <button className="px-5 py-2 text-sm text-white hover:text-[#3399FF] border border-white/30 hover:border-[#3399FF] rounded-full transition-colors">
               Sign In
             </button>
           </SignInButton>
@@ -38,35 +38,35 @@ export default function Home() {
             className="mb-5 mx-auto"
             priority
           />
-          <h1 className="text-[42px] font-extrabold text-[#A21534] tracking-tight">
-            Who&apos;s in the Band?
+          <h1 className="text-[42px] font-extrabold text-white tracking-tight">
+            Orchestra
           </h1>
-          <p className="text-[#A21534]/70 text-base mt-2">
+          <p className="text-white/70 text-base mt-2">
             Search for any artist and contribute band member info
           </p>
         </header>
 
         <SearchInput />
-        <p className="text-[#A21534]/70 text-base my-4">or</p>
+        <p className="text-white/70 text-base my-4">or</p>
         <SuggestBand />
 
         {/* Footer */}
-        <footer className="mt-10 pt-6 text-center text-sm text-[#A21534]/50 border-t border-[#A21534]/20 w-full">
+        <footer className="mt-10 pt-6 text-center text-sm text-white/50 border-t border-white/20 w-full">
           <div className="mb-3">
-            <Link href="/terms" className="text-[#A21534] mx-3 hover:underline">
+            <Link href="/terms" className="text-white mx-3 hover:text-[#3399FF]">
               Terms of Service
             </Link>
-            <Link href="/privacy" className="text-[#A21534] mx-3 hover:underline">
+            <Link href="/privacy" className="text-white mx-3 hover:text-[#3399FF]">
               Privacy & Data
             </Link>
           </div>
-          <div className="text-[#A21534]/50">
+          <div className="text-white/50">
             &copy; {new Date().getFullYear()}{" "}
             <a
               href="https://knokr.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#A21534] hover:underline"
+              className="text-white hover:text-[#3399FF]"
             >
               Knokr
             </a>

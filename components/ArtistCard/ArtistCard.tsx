@@ -58,7 +58,7 @@ export function ArtistCard({
   const hasVideo = enableVideoHover && artist.videoUrl;
 
   const cardContent = (
-    <Card className="shadow-md rounded-lg bg-[#A21534] transition-shadow duration-300 hover:shadow-[0_0_30px_rgba(162,21,52,0.6)]">
+    <Card className="shadow-md rounded-lg bg-[#000A14] transition-shadow duration-300 hover:shadow-[0_0_30px_rgba(0,128,255,0.4)]">
       <CardHeader
         className="group relative p-0 overflow-hidden"
         onMouseEnter={handleMouseEnter}
@@ -75,9 +75,9 @@ export function ArtistCard({
             }`}
           />
         ) : (
-          <div className="aspect-[1.618/1] w-full flex items-center justify-center bg-gradient-to-br from-[#A21534]/40 to-[#A21534]/20">
+          <div className="aspect-[1.618/1] w-full flex items-center justify-center bg-gradient-to-br from-[#0080FF]/40 to-[#0080FF]/20">
             <svg
-              className="h-1/3 w-1/3 text-[#FFF5D0]/50"
+              className="h-1/3 w-1/3 text-white/50"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -108,7 +108,7 @@ export function ArtistCard({
         )}
         {hasSocials && (
           <div className="absolute bottom-0 left-0 right-0 flex justify-center p-1 opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-10">
-            <div className="flex gap-1 rounded-full bg-[#A21534]/90 px-1 py-1">
+            <div className="flex gap-1 rounded-full bg-[#000A14]/90 px-1 py-1">
               {artist.socials!.slice(0, 3).map((social) => (
                 <SocialIcon
                   key={social.network}
@@ -128,13 +128,13 @@ export function ArtistCard({
       <CardBody className="px-4 py-3 text-center">
         <Link href={`/artist/${artist.slug}`}>
           <h2
-            className={`${getNameSizeClass(artist.name)} font-bold tracking-tight text-[#FFF5D0] cursor-pointer hover:text-white transition-colors min-h-14 flex items-center justify-center`}
+            className={`${getNameSizeClass(artist.name)} font-bold tracking-tight text-white cursor-pointer hover:text-[#3399FF] transition-colors min-h-14 flex items-center justify-center`}
           >
             {artist.name}
           </h2>
         </Link>
         {(artist.city || artist.country) && (
-          <p className="text-sm text-[#FFF5D0]/70">
+          <p className="text-sm text-white/70">
             {getLocation(artist.city, artist.region, artist.country)}
           </p>
         )}

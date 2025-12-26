@@ -6,23 +6,23 @@ export const metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-[#fdf5d4]">
-      <header className="border-b border-[#ba326b]/20">
+    <div className="min-h-screen">
+      <header className="border-b border-white/20">
         <div className="max-w-3xl mx-auto px-4 py-4">
-          <Link href="/" className="text-sm text-[#ba326b] hover:text-[#4c222a]">
+          <Link href="/" className="text-sm text-white hover:text-[#3399FF]">
             ← Back to search
           </Link>
         </div>
       </header>
 
       <main className="max-w-3xl mx-auto px-4 py-12">
-        <h1 className="text-4xl font-bold text-[#4c222a] mb-8 uppercase tracking-wide">
+        <h1 className="text-4xl font-bold text-white mb-8 uppercase tracking-wide">
           Terms of Service
         </h1>
 
-        <div className="space-y-6 text-[#4c222a]/80">
+        <div className="space-y-6 text-white/80">
           <section>
-            <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
+            <h2 className="text-lg font-semibold text-white mb-2">
               1. Acceptance of Terms
             </h2>
             <p>
@@ -31,7 +31,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
+            <h2 className="text-lg font-semibold text-white mb-2">
               2. User Contributions
             </h2>
             <p>
@@ -40,7 +40,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
+            <h2 className="text-lg font-semibold text-white mb-2">
               3. Prohibited Conduct
             </h2>
             <p>
@@ -49,7 +49,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
+            <h2 className="text-lg font-semibold text-white mb-2">
               4. Intellectual Property
             </h2>
             <p>
@@ -58,7 +58,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
+            <h2 className="text-lg font-semibold text-white mb-2">
               5. Disclaimer
             </h2>
             <p>
@@ -67,14 +67,14 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-[#4c222a] mb-2">
+            <h2 className="text-lg font-semibold text-white mb-2">
               6. Contact
             </h2>
             <p>
               For questions about these terms, please contact{" "}
               <a
                 href="mailto:legal@knokr.com"
-                className="text-[#ba326b] hover:underline"
+                className="text-white hover:text-[#3399FF]"
               >
                 legal@knokr.com
               </a>
