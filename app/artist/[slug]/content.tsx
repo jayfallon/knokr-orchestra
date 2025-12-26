@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { ArtistCard } from "@/components/ArtistCard";
 import MemberForm from "@/components/MemberForm";
 import FestivalCard from "@/components/FestivalCard";
+import Footer from "@/components/Footer";
 import { getArtistImageUrl } from "@/lib/image";
 
 interface Member {
@@ -339,6 +340,7 @@ export default function ArtistContent({ artist, currentMembers, pastMembers, rel
         </div>
       )}
 
+      <Footer />
     </div>
   );
 }

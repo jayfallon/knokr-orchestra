@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Footer from "@/components/Footer";
 
 export const metadata = {
   title: "Privacy & Data | Orchestra",
@@ -113,6 +114,8 @@ export default function PrivacyPage() {
             </section>
           </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

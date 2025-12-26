@@ -1,8 +1,8 @@
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
-import Link from "next/link";
 import SearchInput from "@/components/SearchInput";
 import SuggestBand from "@/components/SuggestBand";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -49,31 +49,9 @@ export default function Home() {
         <SearchInput />
         <p className="text-white/70 text-base my-4">or</p>
         <SuggestBand />
-
-        {/* Footer */}
-        <footer className="mt-10 pt-6 text-center text-sm text-white/50 border-t border-white/20 w-full">
-          <div className="mb-3">
-            <Link href="/terms" className="text-white mx-3 hover:text-[#3399FF]">
-              Terms of Service
-            </Link>
-            <Link href="/privacy" className="text-white mx-3 hover:text-[#3399FF]">
-              Privacy & Data
-            </Link>
-          </div>
-          <div className="text-white/50">
-            &copy; {new Date().getFullYear()}{" "}
-            <a
-              href="https://knokr.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white hover:text-[#3399FF]"
-            >
-              Knokr
-            </a>
-            . All rights reserved.
-          </div>
-        </footer>
       </div>
+
+      <Footer />
     </div>
   );
 }
