@@ -33,7 +33,7 @@ model Artist {
   contactPage                                            String?
   appleMusic                                             String?
   tourPage                                               String?
-  gender                                                 String[]
+  gender                                                 Gender?
   merchPage                                              String?
   festivalCount                                          Int                    @default(0)
   isEmerging                                             Boolean                @default(false)
@@ -2505,6 +2505,13 @@ enum PopularityTier {
   RISING
   UNDERGROUND
   UNKNOWN
+}
+
+enum Gender {
+  Male
+  Female
+  Mixed
+  Unknown
 }
 
 enum PostStatus {

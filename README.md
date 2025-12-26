@@ -7,7 +7,10 @@ Orchestra lets music fans search for any artist and contribute band member infor
 ## Features
 
 - **Search** — Find any artist in the Knokr database
-- **View Members** — See current and past band members
+- **View Members** — See current and past band members with social links
+- **Related Artists** — Discover connected artists based on shared members, festivals, and genres
+- **Festivals** — See upcoming and past festival appearances
+- **Random Artist** — Discover new artists with a random button
 - **Contribute** — Submit new member info (name, role, years active)
 - **Auto-linking** — Members are automatically matched to existing artist profiles
 - **Rate Limiting** — 10 submissions per hour per IP to prevent abuse
@@ -67,8 +70,10 @@ knokr-orchestra/
 │   ├── privacy/            # Privacy Policy
 │   └── page.tsx            # Home (search)
 ├── components/
+│   ├── ArtistCard/         # Unified card for members and related artists
+│   ├── FestivalCard.tsx    # Festival display card
 │   ├── SearchInput.tsx     # Autocomplete search
-│   ├── MemberCard.tsx      # Member display card
+│   ├── SuggestBand.tsx     # Random artist suggestion
 │   └── MemberForm.tsx      # Submission form
 ├── lib/
 │   ├── db.ts               # Prisma client
@@ -84,6 +89,7 @@ knokr-orchestra/
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/api/artists/search?q=` | Search artists by name |
+| GET | `/api/artists/random` | Get a random artist |
 | GET | `/api/artists/[id]` | Get artist with members |
 | POST | `/api/artists/[id]/members` | Submit new member |
 
