@@ -118,11 +118,16 @@ export default function ArtistContent({ artist, currentMembers, pastMembers, rel
       {/* Hero Image */}
       {getArtistImageUrl(artist.imageUrl) ? (
         <div className="flex justify-center mb-8 mt-8 px-4">
-          <img
-            src={getArtistImageUrl(artist.imageUrl)!}
-            alt={artist.name}
-            className="max-w-7xl h-auto rounded-xl"
-          />
+          <div className="relative w-full max-w-[1200px] aspect-video">
+            <Image
+              src={getArtistImageUrl(artist.imageUrl)!}
+              alt={artist.name}
+              fill
+              className="rounded-xl object-cover"
+              sizes="(max-width: 768px) calc(100vw - 32px), (max-width: 1232px) calc(100vw - 32px), 1200px"
+              priority
+            />
+          </div>
         </div>
       ) : (
         <div className="flex justify-center mb-8">
