@@ -62,6 +62,7 @@ export default async function ArtistPage({ params }: PageProps) {
               endDate: true,
               location: true,
               city: true,
+              region: true,
               country: true,
               imageUrl: true,
             },

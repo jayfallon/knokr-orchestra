@@ -71,6 +71,7 @@ interface Festival {
   endDate: Date | null;
   location: string;
   city: string;
+  region: string | null;
   country: string;
   imageUrl: string | null;
 }
@@ -95,10 +96,14 @@ export default function ArtistContent({ artist, currentMembers, pastMembers, rel
     }
   };
 
-  // Split festivals into upcoming and past
+  // Split festivals into upcoming and past, sorted chronologically
   const now = new Date();
-  const upcomingFestivals = festivals.filter((f) => new Date(f.startDate) >= now);
-  const pastFestivals = festivals.filter((f) => new Date(f.startDate) < now);
+  const upcomingFestivals = festivals
+    .filter((f) => new Date(f.startDate) >= now)
+    .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+  const pastFestivals = festivals
+    .filter((f) => new Date(f.startDate) < now)
+    .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
 
   return (
     <div className="min-h-screen">

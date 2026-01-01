@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Card, CardBody, Chip } from "@heroui/react";
+import { Card, CardBody } from "@heroui/react";
 
 interface Festival {
   id: string;
@@ -11,6 +11,7 @@ interface Festival {
   endDate: Date | null;
   location: string;
   city: string;
+  region: string | null;
   country: string;
   imageUrl: string | null;
 }
@@ -24,6 +25,14 @@ function formatDateRange(startDate: Date, endDate: Date | null): string {
   }
 
   const end = new Date(endDate);
+
+  // Same day - show single date
+  if (start.getFullYear() === end.getFullYear() &&
+      start.getMonth() === end.getMonth() &&
+      start.getDate() === end.getDate()) {
+    return start.toLocaleDateString("en-US", { ...options, year: "numeric" });
+  }
+
   const sameMonth = start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear();
 
   if (sameMonth) {
@@ -31,6 +40,17 @@ function formatDateRange(startDate: Date, endDate: Date | null): string {
   }
 
   return `${start.toLocaleDateString("en-US", options)}–${end.toLocaleDateString("en-US", { ...options, year: "numeric" })}`;
+}
+
+function formatLocation(festival: Festival): string {
+  const country = festival.country.toLowerCase();
+  const isUSA = country === 'united states' || country === 'us' || country === 'usa';
+  const isUK = country === 'united kingdom' || country === 'uk';
+
+  if ((isUSA || isUK) && festival.region) {
+    return `${festival.city}, ${festival.region}`;
+  }
+  return `${festival.city}, ${festival.country}`;
 }
 
 export default function FestivalCard({ festival }: { festival: Festival }) {
@@ -48,7 +68,7 @@ export default function FestivalCard({ festival }: { festival: Festival }) {
                 alt={festival.name}
                 fill
                 sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                className="object-cover transition-transform duration-300 hover:scale-105"
+                className="object-cover object-top transition-transform duration-300 hover:scale-105"
               />
             ) : (
               <div className="flex w-full h-full items-center justify-center bg-gradient-to-br from-[#0080FF]/20 to-[#003366]/20">
@@ -88,15 +108,6 @@ export default function FestivalCard({ festival }: { festival: Festival }) {
                 </svg>
               </div>
             )}
-            <div className="absolute bottom-2 right-2">
-              <Chip
-                size="sm"
-                variant="flat"
-                className="bg-[#000A14]/90 text-white text-xs"
-              >
-                {dateRange}
-              </Chip>
-            </div>
           </div>
 
           <div className="p-4">
@@ -104,7 +115,10 @@ export default function FestivalCard({ festival }: { festival: Festival }) {
               {festival.name}
             </p>
             <p className="text-sm text-white/60 line-clamp-1">
-              {festival.city}, {festival.country}
+              {formatLocation(festival)}
+            </p>
+            <p className="text-sm text-white/60">
+              {dateRange}
             </p>
           </div>
         </CardBody>
