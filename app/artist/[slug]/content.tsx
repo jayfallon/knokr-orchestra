@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { SocialIcon } from "react-social-icons";
 import { ArtistCard } from "@/components/ArtistCard";
 import MemberForm from "@/components/MemberForm";
 import FestivalCard from "@/components/FestivalCard";
@@ -38,6 +39,13 @@ interface Artist {
   bio: string | null;
   website: string | null;
   spotify: string | null;
+  instagram: string | null;
+  facebook: string | null;
+  youtube: string | null;
+  tiktok: string | null;
+  bandcamp: string | null;
+  soundcloud: string | null;
+  appleMusic: string | null;
 }
 
 function formatLocation(artist: Artist): string {
@@ -82,9 +90,10 @@ interface Props {
   pastMembers: Member[];
   relatedArtists: RelatedArtist[];
   festivals: Festival[];
+  isAuthenticated: boolean;
 }
 
-export default function ArtistContent({ artist, currentMembers, pastMembers, relatedArtists, festivals }: Props) {
+export default function ArtistContent({ artist, currentMembers, pastMembers, relatedArtists, festivals, isAuthenticated }: Props) {
   const [showForm, setShowForm] = useState(false);
   const router = useRouter();
 
@@ -136,7 +145,7 @@ export default function ArtistContent({ artist, currentMembers, pastMembers, rel
           </div>
         </div>
       ) : (
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center mb-8 mt-8 px-4">
           <div className="w-full max-w-[800px] rounded-xl bg-white/20 flex items-center justify-center text-6xl text-white" style={{ aspectRatio: "1.618 / 1" }}>
             {artist.name[0]}
           </div>
@@ -162,26 +171,102 @@ export default function ArtistContent({ artist, currentMembers, pastMembers, rel
               ))}
             </div>
           )}
-          <div className="flex justify-center gap-4">
-            {artist.spotify && (
-              <a
-                href={artist.spotify}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-base text-white hover:text-[#3399FF] uppercase tracking-wide"
-              >
-                Spotify
-              </a>
-            )}
+          <div className="flex flex-wrap justify-center gap-3">
             {artist.website && (
-              <a
-                href={artist.website}
+              <SocialIcon
+                url={artist.website}
+                network="sharethis"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-base text-white/80 hover:text-[#3399FF] uppercase tracking-wide"
-              >
-                Website
-              </a>
+                fgColor="#ffffff"
+                bgColor="#000000"
+                style={{ height: 40, width: 40 }}
+              />
+            )}
+            {artist.spotify && (
+              <SocialIcon
+                url={artist.spotify}
+                target="_blank"
+                rel="noopener noreferrer"
+                fgColor="#ffffff"
+                bgColor="#000000"
+                style={{ height: 40, width: 40 }}
+              />
+            )}
+            {isAuthenticated && (
+              <>
+                {artist.instagram && (
+                  <SocialIcon
+                    url={artist.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    fgColor="#ffffff"
+                    bgColor="#000000"
+                    style={{ height: 40, width: 40 }}
+                  />
+                )}
+                {artist.facebook && (
+                  <SocialIcon
+                    url={artist.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    fgColor="#ffffff"
+                    bgColor="#000000"
+                    style={{ height: 40, width: 40 }}
+                  />
+                )}
+                {artist.youtube && (
+                  <SocialIcon
+                    url={artist.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    fgColor="#ffffff"
+                    bgColor="#000000"
+                    style={{ height: 40, width: 40 }}
+                  />
+                )}
+                {artist.tiktok && (
+                  <SocialIcon
+                    url={artist.tiktok}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    fgColor="#ffffff"
+                    bgColor="#000000"
+                    style={{ height: 40, width: 40 }}
+                  />
+                )}
+                {artist.appleMusic && (
+                  <SocialIcon
+                    url={artist.appleMusic}
+                    network="itunes"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    fgColor="#ffffff"
+                    bgColor="#000000"
+                    style={{ height: 40, width: 40 }}
+                  />
+                )}
+                {artist.bandcamp && (
+                  <SocialIcon
+                    url={artist.bandcamp}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    fgColor="#ffffff"
+                    bgColor="#000000"
+                    style={{ height: 40, width: 40 }}
+                  />
+                )}
+                {artist.soundcloud && (
+                  <SocialIcon
+                    url={artist.soundcloud}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    fgColor="#ffffff"
+                    bgColor="#000000"
+                    style={{ height: 40, width: 40 }}
+                  />
+                )}
+              </>
             )}
           </div>
         </div>

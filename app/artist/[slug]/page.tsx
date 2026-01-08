@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
 import ArtistContent from "./content";
 
 interface PageProps {
@@ -23,6 +24,8 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function ArtistPage({ params }: PageProps) {
   const { slug } = await params;
+  const { userId } = await auth();
+  const isAuthenticated = !!userId;
 
   const artist = await prisma.artist.findUnique({
     where: { slug },
@@ -38,6 +41,13 @@ export default async function ArtistPage({ params }: PageProps) {
       bio: true,
       website: true,
       spotify: true,
+      instagram: true,
+      facebook: true,
+      youtube: true,
+      tiktok: true,
+      bandcamp: true,
+      soundcloud: true,
+      appleMusic: true,
       members: {
         select: {
           id: true,
@@ -237,6 +247,7 @@ export default async function ArtistPage({ params }: PageProps) {
       pastMembers={pastMembers}
       relatedArtists={relatedArtists}
       festivals={festivals}
+      isAuthenticated={isAuthenticated}
     />
   );
 }

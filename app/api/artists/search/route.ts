@@ -1,6 +1,17 @@
 import { prisma } from "@/lib/db";
 import { NextRequest } from "next/server";
 
+function formatLocation(city: string, region: string | null, country: string): string {
+  const countryLower = country.toLowerCase();
+  const isUSA = countryLower === "united states" || countryLower === "us" || countryLower === "usa";
+  const isUK = countryLower === "united kingdom" || countryLower === "uk";
+
+  if (isUSA || isUK) {
+    return [city, region].filter(Boolean).join(", ");
+  }
+  return [city, country].filter(Boolean).join(", ");
+}
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const q = searchParams.get("q");
@@ -24,7 +35,9 @@ export async function GET(request: NextRequest) {
         slug: true,
         imageUrl: true,
         genres: true,
-        location: true,
+        city: true,
+        region: true,
+        country: true,
         _count: {
           select: { members: true },
         },
@@ -40,7 +53,7 @@ export async function GET(request: NextRequest) {
         slug: a.slug,
         imageUrl: a.imageUrl,
         genres: a.genres,
-        location: a.location,
+        location: formatLocation(a.city, a.region, a.country),
         memberCount: a._count.members,
       })),
     });
