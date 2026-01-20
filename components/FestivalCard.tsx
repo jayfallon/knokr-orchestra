@@ -67,7 +67,7 @@ export default function FestivalCard({ festival }: { festival: Festival }) {
                 src={festival.imageUrl}
                 alt={festival.name}
                 fill
-                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                unoptimized
                 className="object-cover object-top transition-transform duration-300 hover:scale-105"
               />
             ) : (

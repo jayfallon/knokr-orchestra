@@ -138,8 +138,8 @@ export default function ArtistContent({ artist, currentMembers, pastMembers, rel
               src={getArtistImageUrl(artist.imageUrl)!}
               alt={artist.name}
               fill
+              unoptimized
               className="rounded-xl object-cover"
-              sizes="(max-width: 768px) calc(100vw - 32px), (max-width: 1232px) calc(100vw - 32px), 1200px"
               priority
             />
           </div>

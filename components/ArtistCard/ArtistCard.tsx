@@ -70,6 +70,7 @@ export function ArtistCard({
             alt={artist.name}
             width={400}
             height={247}
+            unoptimized
             className={`aspect-[1.618/1] w-full object-cover transition-all duration-300 group-hover:scale-120 ${
               hasVideo && isHovered ? "opacity-0" : "opacity-100"
             }`}
