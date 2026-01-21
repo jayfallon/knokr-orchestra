@@ -11,10 +11,10 @@ model Artist {
   id                                                     String                 @id @default(cuid())
   name                                                   String
   slug                                                   String                 @unique
-  location                                               String
-  country                                                String
+  location                                               String?
+  country                                                String?
   region                                                 String?
-  city                                                   String
+  city                                                   String?
   genres                                                 String[]
   bio                                                    String?
   website                                                String?
