@@ -33,9 +33,9 @@ interface Artist {
   slug: string;
   imageUrl: string | null;
   genres: string[];
-  city: string;
+  city: string | null;
   region: string | null;
-  country: string;
+  country: string | null;
   bio: string | null;
   website: string | null;
   spotify: string | null;
@@ -49,7 +49,7 @@ interface Artist {
 }
 
 function formatLocation(artist: Artist): string {
-  const country = artist.country.toLowerCase();
+  const country = artist.country?.toLowerCase() ?? "";
   const isUSA = country === 'united states' || country === 'us' || country === 'usa';
   const isUK = country === 'united kingdom' || country === 'uk';
 
@@ -64,9 +64,9 @@ interface RelatedArtist {
   name: string;
   slug: string;
   imageUrl: string | null;
-  city: string;
+  city: string | null;
   region: string | null;
-  country: string;
+  country: string | null;
   socials: { network: string; url: string }[];
   connectionReason: string;
 }
@@ -77,10 +77,10 @@ interface Festival {
   slug: string;
   startDate: Date;
   endDate: Date | null;
-  location: string;
-  city: string;
+  location: string | null;
+  city: string | null;
   region: string | null;
-  country: string;
+  country: string | null;
   imageUrl: string | null;
 }
 

@@ -9,10 +9,10 @@ interface Festival {
   slug: string;
   startDate: Date;
   endDate: Date | null;
-  location: string;
-  city: string;
+  location: string | null;
+  city: string | null;
   region: string | null;
-  country: string;
+  country: string | null;
   imageUrl: string | null;
 }
 
@@ -43,14 +43,14 @@ function formatDateRange(startDate: Date, endDate: Date | null): string {
 }
 
 function formatLocation(festival: Festival): string {
-  const country = festival.country.toLowerCase();
+  const country = festival.country?.toLowerCase() ?? "";
   const isUSA = country === 'united states' || country === 'us' || country === 'usa';
   const isUK = country === 'united kingdom' || country === 'uk';
 
   if ((isUSA || isUK) && festival.region) {
-    return `${festival.city}, ${festival.region}`;
+    return [festival.city, festival.region].filter(Boolean).join(", ");
   }
-  return `${festival.city}, ${festival.country}`;
+  return [festival.city, festival.country].filter(Boolean).join(", ");
 }
 
 export default function FestivalCard({ festival }: { festival: Festival }) {

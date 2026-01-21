@@ -9,9 +9,9 @@ export interface Artist {
   slug: string;
   imageUrl: string | null;
   genres: string[];
-  city: string;
+  city: string | null;
   region: string | null;
-  country: string;
+  country: string | null;
   bio: string | null;
   socials?: ArtistSocial[];
   videoUrl?: string;

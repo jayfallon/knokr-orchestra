@@ -11,9 +11,9 @@ import type { ArtistCardProps } from "./types";
 import "./ArtistCard.css";
 
 function getLocation(
-  city: string,
+  city: string | null,
   region: string | null,
-  country: string
+  country: string | null
 ): string {
   const isUSorUK = country === "United States" || country === "United Kingdom";
   const secondPart = isUSorUK ? region : country;

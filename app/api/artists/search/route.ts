@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/db";
 import { NextRequest } from "next/server";
 
-function formatLocation(city: string, region: string | null, country: string): string {
-  const countryLower = country.toLowerCase();
+function formatLocation(city: string | null, region: string | null, country: string | null): string {
+  const countryLower = country?.toLowerCase() ?? "";
   const isUSA = countryLower === "united states" || countryLower === "us" || countryLower === "usa";
   const isUK = countryLower === "united kingdom" || countryLower === "uk";
 
